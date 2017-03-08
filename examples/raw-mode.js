@@ -1,8 +1,8 @@
-var winston = require('../lib/winston');
+var wilkins = require('../lib/wilkins');
 
-var logger = new (winston.Logger)({
+var logger = new (wilkins.Logger)({
   transports: [
-    new (winston.transports.Console)({ raw: true }),
+    new (wilkins.transports.Console)({ raw: true }),
   ]
 });
 

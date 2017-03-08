@@ -1,11 +1,11 @@
 var assert = require('assert'),
-    winston = require('../../lib/winston'),
+    wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers');
 
 module.exports = function (transport, options) {
-  var logger = transport instanceof winston.Logger
+  var logger = transport instanceof wilkins.Logger
     ? transport
-    : new winston.Logger({
+    : new wilkins.Logger({
         transports: [
           new transport(options)
         ]

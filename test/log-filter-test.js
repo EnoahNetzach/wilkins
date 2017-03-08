@@ -1,11 +1,11 @@
-/* log-filter-test.js: Test filtering of message content in winston.
+/* log-filter-test.js: Test filtering of message content in wilkins.
  * (c) 2015 Chris Oloff
  * MIT LICENSE
  */
 
 var assert = require('assert'),
     vows = require('vows'),
-    winston = require('../lib/winston'),
+    wilkins = require('../lib/wilkins'),
     helpers = require('./helpers');
 
 /* To demo a filter, we filter out credit card numbers, assuming that a credit
@@ -42,10 +42,10 @@ function maskSecrets(msg, meta) {
   };
 }
 
-vows.describe('winston/logger/filter').addBatch({
-  "An instance of winston.Logger": {
-    topic: new (winston.Logger)({transports: [
-      new (winston.transports.Console)({ level: 'info' })
+vows.describe('wilkins/logger/filter').addBatch({
+  "An instance of wilkins.Logger": {
+    topic: new (wilkins.Logger)({transports: [
+      new (wilkins.transports.Console)({ level: 'info' })
     ]}),
     "the filters.push() method, adding a filter only for the message": {
       topic: function (logger) {
@@ -70,9 +70,9 @@ vows.describe('winston/logger/filter').addBatch({
     },
   }
 }).addBatch({
-  "A fresh instance of winston.Logger": {
-    topic: new (winston.Logger)({
-      transports: [new (winston.transports.Console)({ level: 'info' })]
+  "A fresh instance of wilkins.Logger": {
+    topic: new (wilkins.Logger)({
+      transports: [new (wilkins.transports.Console)({ level: 'info' })]
     }),
     "the filters.push() method adding a filter for the message and metadata": {
       topic: function (logger) {

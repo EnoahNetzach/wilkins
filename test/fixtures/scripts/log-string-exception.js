@@ -1,5 +1,5 @@
 /*
- * log-string-exceptions.js: A test fixture for logging string exceptions in winston.
+ * log-string-exceptions.js: A test fixture for logging string exceptions in wilkins.
  *
  * (C) 2011 Charlie Robbins
  * MIT LICENCE
@@ -7,11 +7,11 @@
  */
 
 var path = require('path'),
-    winston = require('../../../lib/winston');
+    wilkins = require('../../../lib/wilkins');
 
-var logger = new (winston.Logger)({
+var logger = new (wilkins.Logger)({
   transports: [
-    new (winston.transports.File)({
+    new (wilkins.transports.File)({
       filename: path.join(__dirname, '..', 'logs', 'string-exception.log'),
       handleExceptions: true
     })

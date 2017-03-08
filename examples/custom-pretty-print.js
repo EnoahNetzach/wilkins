@@ -1,4 +1,4 @@
-var winston = require('../lib/winston');
+var wilkins = require('../lib/wilkins');
 
 function myPrettyPrint(obj) {
   return JSON.stringify(obj)
@@ -7,9 +7,9 @@ function myPrettyPrint(obj) {
     .replace(/\}/g, ' >');
 }
 
-var logger = new (winston.Logger)({
+var logger = new (wilkins.Logger)({
   transports: [
-    new (winston.transports.Console)({ prettyPrint: myPrettyPrint }),
+    new (wilkins.transports.Console)({ prettyPrint: myPrettyPrint }),
   ]
 });
 

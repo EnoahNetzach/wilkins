@@ -9,17 +9,17 @@
 var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    winston = require('../../lib/winston'),
+    wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers'),
     stdMocks = require('std-mocks');
 
-var npmTransport = new (winston.transports.Console)(),
-    syslogTransport = new (winston.transports.Console)({ levels: winston.config.syslog.levels }),
-    alignTransport = new (winston.transports.Console)({ showLevel: true, align: true }),
-    defaultTransport = new (winston.transports.Console)(),
-    rawTransport = new (winston.transports.Console)({ level: 'verbose', raw: true }),
-    debugStdoutTransport = new (winston.transports.Console)({ debugStdout: true }),
-    stderrLevelsTransport = new (winston.transports.Console)({ stderrLevels: ['info', 'warn'] }),
+var npmTransport = new (wilkins.transports.Console)(),
+    syslogTransport = new (wilkins.transports.Console)({ levels: wilkins.config.syslog.levels }),
+    alignTransport = new (wilkins.transports.Console)({ showLevel: true, align: true }),
+    defaultTransport = new (wilkins.transports.Console)(),
+    rawTransport = new (wilkins.transports.Console)({ level: 'verbose', raw: true }),
+    debugStdoutTransport = new (wilkins.transports.Console)({ debugStdout: true }),
+    stderrLevelsTransport = new (wilkins.transports.Console)({ stderrLevels: ['info', 'warn'] }),
     customLevels = {
       alpha: 0,
       beta: 1,
@@ -27,13 +27,13 @@ var npmTransport = new (winston.transports.Console)(),
       delta: 3,
       epsilon: 4,
     },
-    customLevelsAndStderrTransport = new (winston.transports.Console)({
+    customLevelsAndStderrTransport = new (wilkins.transports.Console)({
       levels: customLevels,
       stderrLevels: ['delta', 'epsilon']
     }),
-    noStderrTransport = new (winston.transports.Console)({ stderrLevels: [] });
+    noStderrTransport = new (wilkins.transports.Console)({ stderrLevels: [] });
 
-vows.describe('winston/transports/console').addBatch({
+vows.describe('wilkins/transports/console').addBatch({
   "An instance of the Console Transport": {
     "with showLevel off": {
       topic : function() {
@@ -152,7 +152,7 @@ vows.describe('winston/transports/console').addBatch({
       ['error', 'debug']
     ),
     "should log only 'error' and 'debug' to stderr": helpers.testLoggingToStreams(
-      winston.config.npm.levels, defaultTransport, ['debug', 'error'], stdMocks
+      wilkins.config.npm.levels, defaultTransport, ['debug', 'error'], stdMocks
     )
   }
 }).addBatch({
@@ -166,7 +166,7 @@ vows.describe('winston/transports/console').addBatch({
       ['error']
     ),
     "should log only the 'error' level to stderr": helpers.testLoggingToStreams(
-      winston.config.npm.levels, debugStdoutTransport, ['error'], stdMocks
+      wilkins.config.npm.levels, debugStdoutTransport, ['error'], stdMocks
     )
   }
 }).addBatch({
@@ -184,13 +184,13 @@ vows.describe('winston/transports/console').addBatch({
       ['info', 'warn']
     ),
     "should log only the levels in stderrLevels to stderr": helpers.testLoggingToStreams(
-      winston.config.npm.levels, stderrLevelsTransport, ['info', 'warn'], stdMocks
+      wilkins.config.npm.levels, stderrLevelsTransport, ['info', 'warn'], stdMocks
     )
   }
 }).addBatch({
   "An instance of the Console Transport with stderrLevels set to an empty array": {
     "should log only to stdout, and not to stderr": helpers.testLoggingToStreams(
-      winston.config.npm.levels, noStderrTransport, [], stdMocks
+      wilkins.config.npm.levels, noStderrTransport, [], stdMocks
     )
   }
 }).addBatch({

@@ -1,5 +1,5 @@
 /*
- * log-rewriter-test.js: Tests for rewriting metadata in winston.
+ * log-rewriter-test.js: Tests for rewriting metadata in wilkins.
  *
  * (C) 2010 Charlie Robbins
  * MIT LICENSE
@@ -8,15 +8,15 @@
 
 var assert = require('assert'),
     vows = require('vows'),
-    winston = require('../lib/winston'),
+    wilkins = require('../lib/wilkins'),
     util = require('util'),
     helpers = require('./helpers');
 
-vows.describe('winston/logger/levels').addBatch({
-  "The winston logger": {
-    topic: new (winston.Logger)({
+vows.describe('wilkins/logger/levels').addBatch({
+  "The wilkins logger": {
+    topic: new (wilkins.Logger)({
       transports: [
-        new (winston.transports.Console)()
+        new (wilkins.transports.Console)()
       ]
     }),
     "the info() method": {
@@ -124,7 +124,7 @@ vows.describe('winston/logger/levels').addBatch({
             }
           };
 
-          var logger = winston.loggers.add('hello243', { });
+          var logger = wilkins.loggers.add('hello243', { });
           try {
             logger.setLevels(customLevels.levels);
           } catch (e) {

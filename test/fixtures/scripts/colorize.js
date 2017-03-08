@@ -6,11 +6,11 @@
  *
  */
 
-var winston = require('../../../lib/winston');
+var wilkins = require('../../../lib/wilkins');
 
-var logger = new (winston.Logger)({
+var logger = new (wilkins.Logger)({
     transports: [
-      new winston.transports.Console({ colorize: process.argv[2] === 'true' })
+      new wilkins.transports.Console({ colorize: process.argv[2] === 'true' })
     ]
   });
 logger.info('Simply a test');

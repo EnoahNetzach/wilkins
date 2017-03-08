@@ -9,7 +9,7 @@
 var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    winston = require('../lib/winston'),
+    wilkins = require('../lib/wilkins'),
     spawn = require('cross-spawn-async');
 
 var spawnTest = function(colorize, cb) {
@@ -25,8 +25,8 @@ var spawnTest = function(colorize, cb) {
   });
 };
 
-vows.describe('winston/colorize').addBatch({
-  "When using winston in a non-TTY environment": {
+vows.describe('wilkins/colorize').addBatch({
+  "When using wilkins in a non-TTY environment": {
     "the logger when setup with colorize: true": {
       topic: function() { spawnTest(true, this.callback) },
       "should colorize": function (log) {

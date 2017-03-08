@@ -1,17 +1,17 @@
-var winston = require('../lib/winston');
+var wilkins = require('../lib/wilkins');
 
 //
-// Create a new winston logger instance with two tranports: Console, and Couchdb
+// Create a new wilkins logger instance with two tranports: Console, and Couchdb
 //
 //
 // The Console transport will simply output to the console screen
 // The CouchDB tranport will perform an HTTP POST request to the specified CouchDB instance
 //
-var logger = new (winston.Logger)({
+var logger = new (wilkins.Logger)({
   transports: [
-    new (winston.transports.Console)(),
-    new (winston.transports.Couchdb)({ 'host': 'localhost', 'db': 'logs' })
-    // if you need auth do this: new (winston.transports.Couchdb)({ 'user': 'admin', 'pass': 'admin', 'host': 'localhost', 'db': 'logs' })
+    new (wilkins.transports.Console)(),
+    new (wilkins.transports.Couchdb)({ 'host': 'localhost', 'db': 'logs' })
+    // if you need auth do this: new (wilkins.transports.Couchdb)({ 'user': 'admin', 'pass': 'admin', 'host': 'localhost', 'db': 'logs' })
   ]
 });
 

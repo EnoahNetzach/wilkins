@@ -1,5 +1,5 @@
 /*
- * log-rewriter-test.js: Tests for rewriting metadata in winston.
+ * log-rewriter-test.js: Tests for rewriting metadata in wilkins.
  *
  * (C) 2010 Charlie Robbins
  * MIT LICENSE
@@ -8,13 +8,13 @@
 
 var assert = require('assert'),
     vows = require('vows'),
-    winston = require('../lib/winston'),
+    wilkins = require('../lib/wilkins'),
     helpers = require('./helpers');
 
-vows.describe('winston/logger/rewriter').addBatch({
-  "An instance of winston.Logger": {
-    topic: new (winston.Logger)({transports: [
-      new (winston.transports.Console)({ level: 'info' })
+vows.describe('wilkins/logger/rewriter').addBatch({
+  "An instance of wilkins.Logger": {
+    topic: new (wilkins.Logger)({transports: [
+      new (wilkins.transports.Console)({ level: 'info' })
     ]}),
     "the addRewriter() method": {
       topic: function (logger) {
@@ -45,9 +45,9 @@ vows.describe('winston/logger/rewriter').addBatch({
     }
   }
 }).addBatch({
-  "An instance of winston.Logger with explicit rewriter": {
-    topic: new (winston.Logger)({transports: [
-      new (winston.transports.Console)({ level: 'info'})
+  "An instance of wilkins.Logger with explicit rewriter": {
+    topic: new (wilkins.Logger)({transports: [
+      new (wilkins.transports.Console)({ level: 'info'})
     ], rewriters: [
       function (level, msg, meta) {
         meta.level = level;
@@ -73,9 +73,9 @@ vows.describe('winston/logger/rewriter').addBatch({
     }
   }
 }).addBatch({
-  "An instance of winston.Logger with rewriters": {
-    topic: new (winston.Logger)({transports: [
-      new (winston.transports.Console)({ level: 'info' })
+  "An instance of wilkins.Logger with rewriters": {
+    topic: new (wilkins.Logger)({transports: [
+      new (wilkins.transports.Console)({ level: 'info' })
     ], rewriters: [
       function (level, msg, meta) {
         meta.numbers.push(1);

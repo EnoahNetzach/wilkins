@@ -11,17 +11,17 @@ var assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
-    winston = require('../../lib/winston'),
+    wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers');
 
-var maxsizeTransport = new winston.transports.File({
+var maxsizeTransport = new wilkins.transports.File({
   timestamp: false,
   json: false,
   filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxsize.log'),
   maxsize: 4096
 });
     
-vows.describe('winston/transports/file/maxsize').addBatch({
+vows.describe('wilkins/transports/file/maxsize').addBatch({
   "An instance of the File Transport": {
     "when passed a valid filename": {
       "the log() method": {
@@ -41,7 +41,7 @@ vows.describe('winston/transports/file/maxsize').addBatch({
             function logKbytes (kbytes) {
               //
               // With no timestamp and at the info level,
-              // winston adds exactly 7 characters: 
+              // wilkins adds exactly 7 characters:
               // [info](4)[ :](2)[\n](1)
               //
               for (var i = 0; i < kbytes; i++) {

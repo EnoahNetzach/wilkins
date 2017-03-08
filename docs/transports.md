@@ -1,15 +1,15 @@
-# Winston Transports
+# Wilkins Transports
 
-In `winston` a transport is essentially a storage device for your logs. Each instance of a winston logger can have multiple transports configured at different levels. For example, one may want error logs to be stored in a persistent remote location (like a database), but all logs output to the console or a local file.
+In `wilkins` a transport is essentially a storage device for your logs. Each instance of a wilkins logger can have multiple transports configured at different levels. For example, one may want error logs to be stored in a persistent remote location (like a database), but all logs output to the console or a local file.
 
-There are several [core transports](#winston-core) included in `winston`, which leverage the built-in networking and file I/O offered by node.js core. In addition, there are [third-party transports which are supported by the winston core team](#winston-more). And last (but not least) there are [additional transports written by members of the community](#additional-transports).
+There are several [core transports](#wilkins-core) included in `wilkins`, which leverage the built-in networking and file I/O offered by node.js core. In addition, there are [third-party transports which are supported by the wilkins core team](#wilkins-more). And last (but not least) there are [additional transports written by members of the community](#additional-transports).
 
-* **[Winston Core](#winston-core)**
+* **[Wilkins Core](#wilkins-core)**
   * [Console](#console-transport)
   * [File](#file-transport)
   * [Http](#http-transport)
 
-* **[Winston More](#winston-more)**
+* **[Wilkins More](#wilkins-more)**
   * [CouchDB](#couchdb-transport)
   * [Loggly](#loggly-transport)
   * [MongoDB](#mongodb-transport)
@@ -31,9 +31,9 @@ There are several [core transports](#winston-core) included in `winston`, which 
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
 
-## Winston Core
+## Wilkins Core
 
-There are several core transports included in `winston`, which leverage the built-in networking and file I/O offered by node.js core.
+There are several core transports included in `wilkins`, which leverage the built-in networking and file I/O offered by node.js core.
 
 * [Console](#console-transport)
 * [File](#file-transport)
@@ -42,7 +42,7 @@ There are several core transports included in `winston`, which leverage the buil
 ### Console Transport
 
 ``` js
-  winston.add(winston.transports.Console, options)
+  wilkins.add(wilkins.transports.Console, options)
 ```
 
 The Console transport takes a few simple options:
@@ -65,7 +65,7 @@ The Console transport takes a few simple options:
 
 ### File Transport
 ``` js
-  winston.add(winston.transports.File, options)
+  wilkins.add(wilkins.transports.File, options)
 ```
 
 The File transport should really be the 'Stream' transport since it will accept any [WritableStream][0]. It is named such because it will also accept filenames via the 'filename' option:
@@ -95,10 +95,10 @@ The File transport should really be the 'Stream' transport since it will accept 
 ### Http Transport
 
 ``` js
-  winston.add(winston.transports.Http, options)
+  wilkins.add(wilkins.transports.Http, options)
 ```
 
-The `Http` transport is a generic way to log, query, and stream logs from an arbitrary Http endpoint, preferably [winstond][1]. It takes options that are passed to the node.js `http` or `https` request:
+The `Http` transport is a generic way to log, query, and stream logs from an arbitrary Http endpoint, preferably [wilkinsd][1]. It takes options that are passed to the node.js `http` or `https` request:
 
 * __host:__ (Default: **localhost**) Remote host of the HTTP logging endpoint
 * __port:__ (Default: **80 or 443**) Remote port of the HTTP logging endpoint
@@ -106,9 +106,9 @@ The `Http` transport is a generic way to log, query, and stream logs from an arb
 * __auth:__ (Default: **None**) An object representing the `username` and `password` for HTTP Basic Auth
 * __ssl:__ (Default: **false**) Value indicating if we should us HTTPS
 
-## Winston More
+## Wilkins More
 
-Starting with `winston@0.3.0` an effort was made to remove any transport which added additional dependencies to `winston`. At the time there were several transports already in `winston` which will **always be supported by the winston core team.**
+Starting with `wilkins@0.3.0` an effort was made to remove any transport which added additional dependencies to `wilkins`. At the time there were several transports already in `wilkins` which will **always be supported by the wilkins core team.**
 
 * [CouchDB](#couchdb-transport)
 * [Redis](#redis-transport)
@@ -118,24 +118,24 @@ Starting with `winston@0.3.0` an effort was made to remove any transport which a
 
 ### CouchDB Transport
 
-_As of `winston@0.6.0` the CouchDB transport has been broken out into a new module: [winston-couchdb][2]._
+_As of `wilkins@0.6.0` the CouchDB transport has been broken out into a new module: [wilkins-couchdb][2]._
 
 ``` js
-  winston.add(winston.transports.Couchdb, options)
+  wilkins.add(wilkins.transports.Couchdb, options)
 ```
 
 The `Couchdb` will place your logs in a remote CouchDB database. It will also create a [Design Document][3], `_design/Logs` for later querying and streaming your logs from CouchDB. The transport takes the following options:
 
 * __host:__ (Default: **localhost**) Remote host of the HTTP logging endpoint
 * __port:__ (Default: **5984**) Remote port of the HTTP logging endpoint
-* __db:__ (Default: **winston**) Remote URI of the HTTP logging endpoint
+* __db:__ (Default: **wilkins**) Remote URI of the HTTP logging endpoint
 * __auth:__ (Default: **None**) An object representing the `username` and `password` for HTTP Basic Auth
 * __ssl:__ (Default: **false**) Value indicating if we should us HTTPS
 
 ### Redis Transport
 
 ``` js
-  winston.add(winston.transports.Redis, options)
+  wilkins.add(wilkins.transports.Redis, options)
 ```
 
 This transport accepts the options accepted by the [node-redis][4] client:
@@ -147,17 +147,17 @@ This transport accepts the options accepted by the [node-redis][4] client:
 In addition to these, the Redis transport also accepts the following options.
 
 * __length:__ (Default **200**) Number of log messages to store.
-* __container:__ (Default **winston**) Name of the Redis container you wish your logs to be in.
+* __container:__ (Default **wilkins**) Name of the Redis container you wish your logs to be in.
 * __channel:__ (Default **None**) Name of the Redis channel to stream logs from.
 
 *Metadata:* Logged as JSON literal in Redis
 
 ### Loggly Transport
 
-_As of `winston@0.6.0` the Loggly transport has been broken out into a new module: [winston-loggly][5]._
+_As of `wilkins@0.6.0` the Loggly transport has been broken out into a new module: [wilkins-loggly][5]._
 
 ``` js
-  winston.add(winston.transports.Loggly, options);
+  wilkins.add(wilkins.transports.Loggly, options);
 ```
 
 The Loggly transport is based on [Nodejitsu's][6] [node-loggly][7] implementation of the [Loggly][8] API. If you haven't heard of Loggly before, you should probably read their [value proposition][9]. The Loggly transport takes the following options. Either 'inputToken' or 'inputName' is required:
@@ -174,31 +174,31 @@ The Loggly transport is based on [Nodejitsu's][6] [node-loggly][7] implementatio
 
 ### Logzio Transport
 
-You can download the logzio transport here : [https://github.com/logzio/winston-logzio](https://github.com/logzio/winston-logzio)  
+You can download the logzio transport here : [https://github.com/logzio/wilkins-logzio](https://github.com/logzio/wilkins-logzio)  
 
 *Basic Usage*  
 ```js
-var winston = require('winston');
-var logzioWinstonTransport = require('winston-logzio');
+var wilkins = require('wilkins');
+var logzioWilkinsTransport = require('wilkins-logzio');
 
 var loggerOptions = {
     token: '__YOUR_API_TOKEN__'
 };
-winston.add(logzioWinstonTransport, loggerOptions);
+wilkins.add(logzioWilkinsTransport, loggerOptions);
 
-winston.log('info', 'winston logger configured with logzio transport');
+wilkins.log('info', 'wilkins logger configured with logzio transport');
 ```
 
-For more information about how to configure the logzio transport, view the README.md in the [winston-logzio repo](https://github.com/logzio/winston-logzio).
+For more information about how to configure the logzio transport, view the README.md in the [wilkins-logzio repo](https://github.com/logzio/wilkins-logzio).
 
 
 ### Riak Transport
 
-_As of `winston@0.3.0` the Riak transport has been broken out into a new module: [winston-riak][11]._ Using it is just as easy:
+_As of `wilkins@0.3.0` the Riak transport has been broken out into a new module: [wilkins-riak][11]._ Using it is just as easy:
 
 ``` js
-  var Riak = require('winston-riak').Riak;
-  winston.add(Riak, options);
+  var Riak = require('wilkins-riak').Riak;
+  wilkins.add(Riak, options);
 ```
 
 In addition to the options accepted by the [riak-js][12] [client][13], the Riak transport also accepts the following options. It is worth noting that the riak-js debug option is set to *false* by default:
@@ -223,11 +223,11 @@ In addition to the options accepted by the [riak-js][12] [client][13], the Riak 
 
 ### MongoDB Transport
 
-As of `winston@0.3.0` the MongoDB transport has been broken out into a new module: [winston-mongodb][14]. Using it is just as easy:
+As of `wilkins@0.3.0` the MongoDB transport has been broken out into a new module: [wilkins-mongodb][14]. Using it is just as easy:
 
 ``` js
-  var MongoDB = require('winston-mongodb').MongoDB;
-  winston.add(MongoDB, options);
+  var MongoDB = require('wilkins-mongodb').MongoDB;
+  wilkins.add(MongoDB, options);
 ```
 
 The MongoDB transport takes the following options. 'db' is required:
@@ -244,10 +244,10 @@ The MongoDB transport takes the following options. 'db' is required:
 
 ## Additional Transports
 
-The community has truly embraced `winston`; there are over **23** winston transports and over half of them are maintained by authors external to the winston core team. If you want to check them all out, just search `npm`:
+The community has truly embraced `wilkins`; there are over **23** wilkins transports and over half of them are maintained by authors external to the wilkins core team. If you want to check them all out, just search `npm`:
 
 ``` bash
-  $ npm search winston
+  $ npm search wilkins
 ```
 
 **If you have an issue using one of these modules you should contact the module author directly**
@@ -257,15 +257,15 @@ The community has truly embraced `winston`; there are over **23** winston transp
 Log to Elasticsearch in a logstash-like format and
 leverage Kibana to browser your logs.
 
-See: https://github.com/vanthome/winston-elasticsearch.
+See: https://github.com/vanthome/wilkins-elasticsearch.
 
 ### SimpleDB Transport
 
-The [winston-simpledb][15] transport is just as easy:
+The [wilkins-simpledb][15] transport is just as easy:
 
 ``` js
-  var SimpleDB = require('winston-simpledb').SimpleDB;
-  winston.add(SimpleDB, options);
+  var SimpleDB = require('wilkins-simpledb').SimpleDB;
+  wilkins.add(SimpleDB, options);
 ```
 
 The SimpleDB transport takes the following options. All items marked with an asterisk are required:
@@ -281,17 +281,17 @@ The SimpleDB transport takes the following options. All items marked with an ast
 
 ### Mail Transport
 
-The [winston-mail][16] is an email transport:
+The [wilkins-mail][16] is an email transport:
 
 ``` js
-  var Mail = require('winston-mail').Mail;
-  winston.add(Mail, options);
+  var Mail = require('wilkins-mail').Mail;
+  wilkins.add(Mail, options);
 ```
 
 The Mail transport uses [node-mail][17] behind the scenes.  Options are the following, `to` and `host` are required:
 
 * __to:__ The address(es) you want to send to. *[required]*
-* __from:__ The address you want to send from. (default: `winston@[server-host-name]`)
+* __from:__ The address you want to send from. (default: `wilkins@[server-host-name]`)
 * __host:__ SMTP server hostname
 * __port:__ SMTP port (default: 587 or 25)
 * __secure:__ Use secure
@@ -304,13 +304,13 @@ The Mail transport uses [node-mail][17] behind the scenes.  Options are the foll
 
 ### Amazon SNS (Simple Notification System) Transport
 
-The [winston-sns][18] transport uses amazon SNS to send emails, texts, or a bunch of other notifications. Since this transport uses the Amazon AWS SDK for JavaScript, you can take advantage of the various methods of authentication found in Amazon's [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html) document.
+The [wilkins-sns][18] transport uses amazon SNS to send emails, texts, or a bunch of other notifications. Since this transport uses the Amazon AWS SDK for JavaScript, you can take advantage of the various methods of authentication found in Amazon's [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html) document.
 
 ``` js
-  var winston = require('winston'),
-      winstonSNS = require('winston-sns');
+  var wilkins = require('wilkins'),
+      wilkinsSNS = require('wilkins-sns');
 
-  winston.add(winstonSNS, options);
+  wilkins.add(wilkinsSNS, options);
 ```
 
 Options:
@@ -320,7 +320,7 @@ Options:
 * __aws_key:__ Your Amazon Web Services Key.
 * __aws_secret:__ Your Amazon Web Services Secret.
 * __region:__ AWS Region to use. Can be one of: `us-east-1`,`us-west-1`,`eu-west-1`,`ap-southeast-1`,`ap-northeast-1`,`us-gov-west-1`,`sa-east-1`. (default: `us-east-1`)
-* __subject:__ Subject for notifications. Uses placeholders for level (%l), error message (%e), and metadata (%m). (default: "Winston Error Report")
+* __subject:__ Subject for notifications. Uses placeholders for level (%l), error message (%e), and metadata (%m). (default: "Wilkins Error Report")
 * __message:__ Message of notifications. Uses placeholders for level (%l), error message (%e), and metadata (%m). (default: "Level '%l' Error:\n%e\n\nMetadata:\n%m")
 * __level:__ lowest level this transport will log. (default: `info`)
 * __json:__ use json instead of a prettier (human friendly) string for meta information in the notification. (default: `false`)
@@ -328,13 +328,13 @@ Options:
 
 ### Amazon CloudWatch Transport
 
-The [winston-aws-cloudwatch][25] transport relays your log messages to Amazon CloudWatch.
+The [wilkins-aws-cloudwatch][25] transport relays your log messages to Amazon CloudWatch.
 
 ```js
-  var winston = require('winston'),
-      winstonAwsCloudWatch = require('winston-aws-cloudwatch');
+  var wilkins = require('wilkins'),
+      wilkinsAwsCloudWatch = require('wilkins-aws-cloudwatch');
 
-  winston.add(winstonAwsCloudWatch, options);
+  wilkins.add(wilkinsAwsCloudWatch, options);
 ```
 
 Options:
@@ -343,17 +343,17 @@ Options:
 * __logStreamName:__ The name of the CloudWatch log stream to which to log. *[required]*
 * __awsConfig:__ An object containing your `accessKeyId`, `secretAccessKey`, `region`, etc.
 
-Alternatively, you may be interested in [winston-cloudwatch][26].
+Alternatively, you may be interested in [wilkins-cloudwatch][26].
 
 ### Amazon Kinesis Firehose Transport
 
-The [winston-firehose][28] transport relays your log messages to Amazon Kinesis Firehose.
+The [wilkins-firehose][28] transport relays your log messages to Amazon Kinesis Firehose.
 
 ```js
-  var winston = require('winston');
-  var WFirehose = require('winston-firehose');
+  var wilkins = require('wilkins');
+  var WFirehose = require('wilkins-firehose');
 
-  winston.add(WFirehose, options);
+  wilkins.add(WFirehose, options);
 ```
 
 Options:
@@ -363,14 +363,14 @@ Options:
 
 
 ### Amazon DynamoDB Transport
-The [winston-dynamodb][26] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
+The [wilkins-dynamodb][26] transport uses Amazon's DynamoDB as a sink for log messages. You can take advantage of the various authentication methods supports by Amazon's aws-sdk module. See [Configuring the SDK in Node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
 
 ``` js
-  var winston = require('winston'),
-      winstonDynamo = require("winston-dynamodb");
+  var wilkins = require('wilkins'),
+      wilkinsDynamo = require("wilkins-dynamodb");
 
-  winstonDynamo.DynamoDB;
-  winston.add(winston.transports.DynamoDB, options)
+  wilkinsDynamo.DynamoDB;
+  wilkins.add(wilkins.transports.DynamoDB, options)
 ```
 
 Options:
@@ -386,18 +386,18 @@ To Configure using environment authentication:
     useEnvironment: true,
     tableName: 'log'
   };
-  winston.add(winston.transports.DynamoDB, options);
+  wilkins.add(wilkins.transports.DynamoDB, options);
 ```
 
 Also supports callbacks for completion when the DynamoDB putItem has been compelted.
 
 ### Papertrail Transport
 
-[winston-papertrail][27] is a Papertrail transport:
+[wilkins-papertrail][27] is a Papertrail transport:
 
 ``` js
-  var Papertrail = require('winston-papertrail').Papertrail;
-  winston.add(Papertrail, options);
+  var Papertrail = require('wilkins-papertrail').Papertrail;
+  wilkins.add(Papertrail, options);
 ```
 
 The Papertrail transport connects to a [PapertrailApp log destination](https://papertrailapp.com) over TCP (TLS) using the following options:
@@ -413,11 +413,11 @@ The Papertrail transport connects to a [PapertrailApp log destination](https://p
 
 ### Graylog2 Transport
 
-[winston-graylog2][19] is a Graylog2 transport:
+[wilkins-graylog2][19] is a Graylog2 transport:
 
 ``` js
-  var winston = require('winston');
-  winston.add(require('winston-graylog2'), options);
+  var wilkins = require('wilkins');
+  wilkins.add(require('wilkins-graylog2'), options);
 ```
 
 The Graylog2 transport connects to a Graylog2 server over UDP using the following options:
@@ -436,11 +436,11 @@ The Graylog2 transport connects to a Graylog2 server over UDP using the followin
 
 ### Cassandra Transport
 
-[winston-cassandra][20] is a Cassandra transport:
+[wilkins-cassandra][20] is a Cassandra transport:
 
 ``` js
-  var Cassandra = require('winston-cassandra').Cassandra;
-  winston.add(Cassandra, options);
+  var Cassandra = require('wilkins-cassandra').Cassandra;
+  wilkins.add(Cassandra, options);
 ```
 
 The Cassandra transport connects to a cluster using the native protocol with the following options:
@@ -458,11 +458,11 @@ Array of strings containing the hosts, for example `['host1', 'host2']` (require
 
 ### Azure Table
 
-[winston-azuretable][21] is a Azure Table transport:
+[wilkins-azuretable][21] is a Azure Table transport:
 
 ``` js
-  var azureLogger = require('winston-azuretable').AzureLogger
-  winston.add(azureLogger, options);
+  var azureLogger = require('wilkins-azuretable').AzureLogger
+  wilkins.add(azureLogger, options);
 ```
 
 The Azure Table transport connects to an Azure Storage Account using the following options:
@@ -477,11 +477,11 @@ The Azure Table transport connects to an Azure Storage Account using the followi
 
 ### Airbrake Transport
 
-[winston-airbrake2][22] is a transport for winston that sends your logs to Airbrake.io.
+[wilkins-airbrake2][22] is a transport for wilkins that sends your logs to Airbrake.io.
 
 ``` js
-  var winston = require('winston');
-  winston.add(require('winston-airbrake2').Airbrake, options);
+  var wilkins = require('wilkins');
+  wilkins.add(require('wilkins-airbrake2').Airbrake, options);
 ```
 
 The Airbrake transport utilises the node-airbrake module to send logs to the Airbrake.io API. You can set the following options:
@@ -499,11 +499,11 @@ The Airbrake transport utilises the node-airbrake module to send logs to the Air
 
 ### Winlog2 Transport
 
-[winston-winlog2][19] is a Windows Event log transport:
+[wilkins-winlog2][19] is a Windows Event log transport:
 
 ``` js
-  var winston = require('winston');
-  winston.add(require('winston-winlog2'), options);
+  var wilkins = require('wilkins');
+  wilkins.add(require('wilkins-winlog2'), options);
 ```
 
 The winlog2 transport uses the following options:
@@ -514,11 +514,11 @@ The winlog2 transport uses the following options:
 
 ### Newrelic Transport
 
-[newrelic-winston][23] is a Newrelic transport:
+[newrelic-wilkins][23] is a Newrelic transport:
 
 ``` js
-  var winston = require('winston');
-  winston.add(require('newrelic-winston'), options);
+  var wilkins = require('wilkins');
+  wilkins.add(require('newrelic-wilkins'), options);
 ```
 
 The Newrelic transport will send your errors to newrelic and accepts the follwing optins:
@@ -529,14 +529,14 @@ If `env` is either 'dev' or 'test' the lib will _not_ load the included newrelic
 
 ### Logsene Transport
 
-[winston-logsene][24] transport for Elasticsearch bulk indexing via HTTPS to Logsene:
+[wilkins-logsene][24] transport for Elasticsearch bulk indexing via HTTPS to Logsene:
 
 ``` js
-  var winston = require('winston')
-  var Logsene = require('winston-logsene')
-  var logger = new winston.Logger()
+  var wilkins = require('wilkins')
+  var Logsene = require('wilkins-logsene')
+  var logger = new wilkins.Logger()
   logger.add (Logsene, {token: process.env.LOGSENE_TOKEN})
-  logger.info ("Info message no. %d logged to %s",1,'Logsene', {metadata: "test-log", count:1 , tags: ['test', 'info', 'winston'], memoryUsage: process.memoryUsage()})
+  logger.info ("Info message no. %d logged to %s",1,'Logsene', {metadata: "test-log", count:1 , tags: ['test', 'info', 'wilkins'], memoryUsage: process.memoryUsage()})
 ```
 Options:
 * __token__: Logsene Application Token
@@ -551,63 +551,63 @@ Options:
 ## Find more Transports
 
 ``` bash
-  $ npm search winston
+  $ npm search wilkins
   (...)
-  winston-amon         Winston transport for Amon logging                            =zoramite
-  winston-amqp         An AMQP transport for winston                                 =kr1sp1n
-  winston-cassandra    A Cassandra transport for winston                             =jorgebay
-  winston-couchdb      a couchdb transport for winston                               =alz
-  winston-express      Express middleware to let you use winston from the browser.   =regality
-  winston-graylog2     A graylog2 transport for winston                              =smithclay
-  winston-hbase        A HBase transport for winston                                 =ddude
-  winston-loggly       A Loggly transport for winston                                =indexzero
-  winston-mail         A mail transport for winston                                  =wavded
-  winston-mail2        A mail transport for winston                                  =ivolo
-  winston-mongodb      A MongoDB transport for winston                               =indexzero
-  winston-nodemail     A mail transport for winston                                  =reinpk
-  winston-nssocket     nssocket transport for winston                                =mmalecki
-  winston-papertrail   A Papertrail transport for winston                            =kenperkins
-  winston-redis        A fixed-length Redis transport for winston                    =indexzero
-  winston-riak         A Riak transport for winston                                  =indexzero
-  winston-scribe       A scribe transport for winston                                =wnoronha
-  winston-simpledb     A Winston transport for Amazon SimpleDB                       =chilts
-  winston-skywriter    A Windows Azure table storage transport for winston           =pofallon
-  winston-sns          A Simple Notification System Transport for winston            =jesseditson
-  winston-syslog       A syslog transport for winston                                =indexzero
-  winston-syslog-ain2  An ain2 based syslog transport for winston                    =lamtha
-  winston-winlog       Windows Event Log logger for Winston                          =jfromaniello
-  winston-winlog2      Windows Event Log logger for Winston (no node-gyp)            =peteward44
-  winston-zmq          A 0MQ transport for winston                                   =dhendo
-  winston-growl        A growl transport for winston                                 =pgherveou
+  wilkins-amon         Wilkins transport for Amon logging                            =zoramite
+  wilkins-amqp         An AMQP transport for wilkins                                 =kr1sp1n
+  wilkins-cassandra    A Cassandra transport for wilkins                             =jorgebay
+  wilkins-couchdb      a couchdb transport for wilkins                               =alz
+  wilkins-express      Express middleware to let you use wilkins from the browser.   =regality
+  wilkins-graylog2     A graylog2 transport for wilkins                              =smithclay
+  wilkins-hbase        A HBase transport for wilkins                                 =ddude
+  wilkins-loggly       A Loggly transport for wilkins                                =indexzero
+  wilkins-mail         A mail transport for wilkins                                  =wavded
+  wilkins-mail2        A mail transport for wilkins                                  =ivolo
+  wilkins-mongodb      A MongoDB transport for wilkins                               =indexzero
+  wilkins-nodemail     A mail transport for wilkins                                  =reinpk
+  wilkins-nssocket     nssocket transport for wilkins                                =mmalecki
+  wilkins-papertrail   A Papertrail transport for wilkins                            =kenperkins
+  wilkins-redis        A fixed-length Redis transport for wilkins                    =indexzero
+  wilkins-riak         A Riak transport for wilkins                                  =indexzero
+  wilkins-scribe       A scribe transport for wilkins                                =wnoronha
+  wilkins-simpledb     A Wilkins transport for Amazon SimpleDB                       =chilts
+  wilkins-skywriter    A Windows Azure table storage transport for wilkins           =pofallon
+  wilkins-sns          A Simple Notification System Transport for wilkins            =jesseditson
+  wilkins-syslog       A syslog transport for wilkins                                =indexzero
+  wilkins-syslog-ain2  An ain2 based syslog transport for wilkins                    =lamtha
+  wilkins-winlog       Windows Event Log logger for Wilkins                          =jfromaniello
+  wilkins-winlog2      Windows Event Log logger for Wilkins (no node-gyp)            =peteward44
+  wilkins-zmq          A 0MQ transport for wilkins                                   =dhendo
+  wilkins-growl        A growl transport for wilkins                                 =pgherveou
 
 ```
 
 [0]: https://nodejs.org/api/stream.html#stream_class_stream_writable
-[1]: https://github.com/flatiron/winstond
-[2]: https://github.com/indexzero/winston-couchdb
+[1]: https://github.com/flatiron/wilkinsd
+[2]: https://github.com/indexzero/wilkins-couchdb
 [3]: http://guide.couchdb.org/draft/design.html
 [4]: https://github.com/mranney/node_redis
-[5]: https://github.com/indexzero/winston-loggly
+[5]: https://github.com/indexzero/wilkins-loggly
 [6]: http://nodejitsu.com
 [7]: https://github.com/nodejitsu/node-loggly
 [8]: http://loggly.com
 [9]: http://www.loggly.com/product/
 [10]: http://wiki.loggly.com/loggingfromcode
-[11]: https://github.com/indexzero/winston-riak
+[11]: https://github.com/indexzero/wilkins-riak
 [12]: http://riakjs.org
 [13]: https://github.com/frank06/riak-js/blob/master/src/http_client.coffee#L10
-[14]: http://github.com/indexzero/winston-mongodb
-[15]: http://github.com/appsattic/winston-simpledb
-[16]: http://github.com/wavded/winston-mail
+[14]: http://github.com/indexzero/wilkins-mongodb
+[15]: http://github.com/appsattic/wilkins-simpledb
+[16]: http://github.com/wavded/wilkins-mail
 [17]: https://github.com/weaver/node-mail
-[18]: https://github.com/jesseditson/winston-sns
-[19]: https://github.com/namshi/winston-graylog2
-[20]: https://github.com/jorgebay/winston-cassandra
-[21]: https://github.com/jpoon/winston-azuretable
-[22]: https://github.com/rickcraig/winston-airbrake2
-[23]: https://github.com/namshi/winston-newrelic
-[24]: https://github.com/sematext/winston-logsene
-[25]: https://github.com/timdp/winston-aws-cloudwatch
-[26]: https://github.com/lazywithclass/winston-cloudwatch
-[27]: https://github.com/kenperkins/winston-papertrail
-[28]: https://github.com/pkallos/winston-firehose
+[18]: https://github.com/jesseditson/wilkins-sns
+[19]: https://github.com/namshi/wilkins-graylog2
+[20]: https://github.com/jorgebay/wilkins-cassandra
+[21]: https://github.com/jpoon/wilkins-azuretable
+[22]: https://github.com/rickcraig/wilkins-airbrake2
+[23]: https://github.com/namshi/wilkins-newrelic
+[24]: https://github.com/sematext/wilkins-logsene
+[25]: https://github.com/timdp/wilkins-aws-cloudwatch
+[26]: https://github.com/lazywithclass/wilkins-cloudwatch
+[27]: https://github.com/kenperkins/wilkins-papertrail
+[28]: https://github.com/pkallos/wilkins-firehose

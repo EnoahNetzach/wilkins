@@ -1,11 +1,11 @@
 /*
- * custom-levels.js: Custom logger and color levels in winston
+ * custom-levels.js: Custom logger and color levels in wilkins
  *
  * (C) 2012, Nodejitsu Inc.
  *
  */
 
-var winston = require('../lib/winston');
+var wilkins = require('../lib/wilkins');
 
 //
 // Logging levels
@@ -31,9 +31,9 @@ var config = {
   }
 };
 
-var logger = module.exports = new (winston.Logger)({
+var logger = module.exports = new (wilkins.Logger)({
   transports: [
-    new (winston.transports.Console)({
+    new (wilkins.transports.Console)({
       colorize: true
     })
   ],

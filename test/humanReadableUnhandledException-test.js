@@ -8,13 +8,13 @@
 
 var assert = require('assert'),
     vows = require('vows'),
-    winston = require('../lib/winston');
+    wilkins = require('../lib/wilkins');
 
-vows.describe('winston/transport/humanReadableUnhandledException').addBatch({
+vows.describe('wilkins/transport/humanReadableUnhandledException').addBatch({
   "When humanReadableUnhandledException option is used": {
     "with memory transport": {
       topic: function () {
-        var transport = new (winston.transports.Memory)({humanReadableUnhandledException: true});
+        var transport = new (wilkins.transports.Memory)({humanReadableUnhandledException: true});
         return this.callback(null, transport);
       },
       "should log the stack trace in a human readable form": function (_, transport) {

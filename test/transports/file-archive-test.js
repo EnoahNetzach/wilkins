@@ -11,10 +11,10 @@ var assert = require('assert'),
   fs = require('fs'),
   path = require('path'),
   vows = require('vows'),
-  winston = require('../../lib/winston'),
+  wilkins = require('../../lib/wilkins'),
   helpers = require('../helpers');
 
-var archiveTransport = new winston.transports.File({
+var archiveTransport = new wilkins.transports.File({
   timestamp: true,
   json: false,
   zippedArchive: true,
@@ -32,7 +32,7 @@ function data(ch) {
 function logKbytes(kbytes, txt) {
   //
   // With no timestamp and at the info level,
-  // winston adds exactly 7 characters:
+  // wilkins adds exactly 7 characters:
   // [info](4)[ :](2)[\n](1)
   //
   for (var i = 0; i < kbytes; i++) {
@@ -40,7 +40,7 @@ function logKbytes(kbytes, txt) {
   }
 }
 
-vows.describe('winston/transports/file/zippedArchive').addBatch({
+vows.describe('wilkins/transports/file/zippedArchive').addBatch({
   "An instance of the File Transport with tailable true": {
     "when created archived files are rolled": {
       topic: function() {

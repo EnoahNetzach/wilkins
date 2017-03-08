@@ -1,4 +1,4 @@
-var winston = require('../lib/winston');
+var wilkins = require('../lib/wilkins');
 
 var myCustomLevels = {
     levels: {
@@ -15,7 +15,7 @@ var myCustomLevels = {
     }
 };
 
-var customLevelLogger = new (winston.Logger)({ levels: myCustomLevels.levels });
+var customLevelLogger = new (wilkins.Logger)({ levels: myCustomLevels.levels });
 customLevelLogger.foobar('some foobar level-ed message');
 customLevelLogger.foobar('some foobar level-ed message');
 customLevelLogger.foobar('some foobar level-ed message');

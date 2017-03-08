@@ -11,7 +11,7 @@ var assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
-    winston = require('../lib/winston'),
+    wilkins = require('../lib/wilkins'),
     helpers = require('./helpers');
 
 function assertFileFormatter (basename, options) {
@@ -23,7 +23,7 @@ function assertFileFormatter (basename, options) {
   return {
     topic: function () {
       options.filename = filename;
-      var transport = new (winston.transports.File)(options);
+      var transport = new (wilkins.transports.File)(options);
 
       // We must wait until transport file has emitted the 'flush'
       // event to be sure the file has been created and written
@@ -37,7 +37,7 @@ function assertFileFormatter (basename, options) {
   }
 }
 
-vows.describe('winston/transport/formatter').addBatch({
+vows.describe('wilkins/transport/formatter').addBatch({
   "Without formatter": {
     "with file transport": assertFileFormatter('customFormatterNotSetForFile', {
       pattern: /info\:/,

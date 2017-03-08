@@ -1,13 +1,13 @@
 var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    winston = require('../../lib/winston'),
+    wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers');
 
-var npmTransport = new (winston.transports.Memory)(),
-    syslogTransport = new (winston.transports.Memory)({ levels: winston.config.syslog.levels });
+var npmTransport = new (wilkins.transports.Memory)(),
+    syslogTransport = new (wilkins.transports.Memory)({ levels: wilkins.config.syslog.levels });
 
-vows.describe('winston/transports/memory').addBatch({
+vows.describe('wilkins/transports/memory').addBatch({
   "An instance of the Memory Transport": {
     "with npm levels": {
       "should have the proper methods defined": function () {

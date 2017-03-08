@@ -8,7 +8,7 @@
 
 var assert = require('assert'),
     vows = require('vows'),
-    winston = require('../lib/winston');
+    wilkins = require('../lib/wilkins');
 
 /* Custom logging function */
 function myPrettyPrint(obj) {
@@ -18,11 +18,11 @@ function myPrettyPrint(obj) {
     .replace(/\}/g, ' >');
 }
 
-vows.describe('winston/transport/prettyPrint').addBatch({
+vows.describe('wilkins/transport/prettyPrint').addBatch({
   "When pretty option is used": {
     "with memory transport": {
       topic: function () {
-        var transport = new (winston.transports.Memory)({prettyPrint: myPrettyPrint});
+        var transport = new (wilkins.transports.Memory)({prettyPrint: myPrettyPrint});
         return this.callback(null, transport);
       },
       "should log using a function value": function (_, transport) {

@@ -1,5 +1,5 @@
 /*
- * cli-test.js: Tests for the cli levels available in winston.
+ * cli-test.js: Tests for the cli levels available in wilkins.
  *
  * (C) 2010 Charlie Robbins
  * MIT LICENSE
@@ -9,14 +9,14 @@
 var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    winston = require('../lib/winston'),
+    wilkins = require('../lib/wilkins'),
     helpers = require('./helpers');
 
-vows.describe('winston/logger/cli').addBatch({
-  "When an instance of winston.transports.Console()": {
+vows.describe('wilkins/logger/cli').addBatch({
+  "When an instance of wilkins.transports.Console()": {
     "has colorize true": {
       topic: function () {
-        var transport = new winston.transports.Console({ colorize: true });
+        var transport = new wilkins.transports.Console({ colorize: true });
         transport.log('prompt', 'This had better work.', { test: true }, this.callback);
       },
       "should function without error": function (err, ok) {
@@ -25,11 +25,11 @@ vows.describe('winston/logger/cli').addBatch({
       }
     }
   },
-  "When an instance of winston.Logger": {
+  "When an instance of wilkins.Logger": {
     topic: function () {
-      return new winston.Logger({
+      return new wilkins.Logger({
         transports: [
-          new winston.transports.Console()
+          new wilkins.transports.Console()
         ]
       })
     },
@@ -39,12 +39,12 @@ vows.describe('winston/logger/cli').addBatch({
         assert.isTrue(logger.padLevels);
         assert.isTrue(logger.transports.console.colorize);
         assert.isFalse(logger.transports.console.timestamp);
-        Object.keys(winston.config.cli.levels).forEach(function (level) {
+        Object.keys(wilkins.config.cli.levels).forEach(function (level) {
           assert.isNumber(logger.levels[level]);
         });
 
-        Object.keys(winston.config.cli.colors).forEach(function (color) {
-          assert.isString(winston.config.allColors[color]);
+        Object.keys(wilkins.config.cli.colors).forEach(function (color) {
+          assert.isString(wilkins.config.allColors[color]);
         });
       }
     }

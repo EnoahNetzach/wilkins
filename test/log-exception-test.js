@@ -1,5 +1,5 @@
 /*
- * exception-test.js: Tests for exception data gathering in winston.
+ * exception-test.js: Tests for exception data gathering in wilkins.
  *
  * (C) 2010 Charlie Robbins
  * MIT LICENSE
@@ -11,18 +11,18 @@ var assert = require('assert'),
     fs = require('fs'),
     spawn = require('child_process').spawn,
     vows = require('vows'),
-    winston = require('../lib/winston'),
+    wilkins = require('../lib/wilkins'),
     helpers = require('./helpers'),
     exists = (fs.exists || path.exists);
 
-vows.describe('winston/logger/exceptions').addBatch({
-  "When using winston": {
+vows.describe('wilkins/logger/exceptions').addBatch({
+  "When using wilkins": {
     "the handleException() method": {
-      "with a custom winston.Logger instance": helpers.assertHandleExceptions({
+      "with a custom wilkins.Logger instance": helpers.assertHandleExceptions({
         script: path.join(__dirname, 'fixtures', 'scripts', 'log-exceptions.js'),
         logfile: path.join(__dirname, 'fixtures', 'logs', 'exception.log')
       }),
-      "with the default winston logger": helpers.assertHandleExceptions({
+      "with the default wilkins logger": helpers.assertHandleExceptions({
         script: path.join(__dirname, 'fixtures', 'scripts', 'default-exceptions.js'),
         logfile: path.join(__dirname, 'fixtures', 'logs', 'default-exception.log')
       }),

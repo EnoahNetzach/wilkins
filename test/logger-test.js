@@ -1,5 +1,5 @@
 /*
- * logger-test.js: Tests for instances of the winston Logger
+ * logger-test.js: Tests for instances of the wilkins Logger
  *
  * (C) 2010 Charlie Robbins
  * MIT LICENSE
@@ -11,14 +11,14 @@ var assert = require('assert'),
     util = require('util'),
     stdMocks = require('std-mocks'),
     vows = require('vows'),
-    winston = require('../lib/winston'),
+    wilkins = require('../lib/wilkins'),
     helpers = require('./helpers'),
     transport = require('./transports/transport');
 
 vows.describe('winton/logger').addBatch({
-  "An instance of winston.Logger": {
+  "An instance of wilkins.Logger": {
     "with transports": {
-      topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
+      topic: new (wilkins.Logger)({ transports: [new (wilkins.transports.Console)({ level: 'info' })] }),
       "should have the correct methods / properties defined": function (logger) {
         helpers.assertLogger(logger);
       },
@@ -29,7 +29,7 @@ vows.describe('winton/logger').addBatch({
       }
     },
     "with no transports": {
-      topic: new winston.Logger(),
+      topic: new wilkins.Logger(),
       "the log method": {
         topic: function (logger) {
           var that = this;
@@ -44,8 +44,8 @@ vows.describe('winton/logger').addBatch({
     }
   }
 }).addBatch({
-  "An instance of winston.Logger": {
-    topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
+  "An instance of wilkins.Logger": {
+    topic: new (wilkins.Logger)({ transports: [new (wilkins.transports.Console)({ level: 'info' })] }),
     "the log() method": {
       "when listening for the 'logging' event": {
         topic: function (logger) {
@@ -69,8 +69,8 @@ vows.describe('winton/logger').addBatch({
     }
   }
 }).addBatch({
-  "An instance of winston.Logger": {
-    topic: new (winston.Logger)({ transports: [new (winston.transports.Console)({ level: 'info' })] }),
+  "An instance of wilkins.Logger": {
+    topic: new (wilkins.Logger)({ transports: [new (wilkins.transports.Console)({ level: 'info' })] }),
     "the configure() method": {
       "with no options": function (logger) {
         assert.equal(Object.keys(logger.transports).length, 1);
@@ -83,7 +83,7 @@ vows.describe('winton/logger').addBatch({
         assert.equal(Object.keys(logger.transports).length, 0);
         assert.deepEqual(logger._names, []);
         logger.configure({
-          transports: [new winston.transports.Console({ level: 'verbose' })]
+          transports: [new wilkins.transports.Console({ level: 'verbose' })]
         });
         assert.equal(Object.keys(logger.transports).length, 1);
         assert.deepEqual(logger._names, ['console']);
@@ -91,21 +91,21 @@ vows.describe('winton/logger').addBatch({
     }
   }
 }).addBatch({
-  "An instance of winston.Logger with no transports": {
-    topic: new (winston.Logger)({ emitErrs: true }),
+  "An instance of wilkins.Logger with no transports": {
+    topic: new (wilkins.Logger)({ emitErrs: true }),
     "the log() method should throw an error": function (logger) {
       assert.throws(function () { logger.log('anything') }, Error);
     },
     "the add() method with a supported transport": {
       topic: function (logger) {
-        return logger.add(winston.transports.Console);
+        return logger.add(wilkins.transports.Console);
       },
       "should add the console Transport onto transports": function (logger) {
         assert.equal(helpers.size(logger.transports), 1);
         helpers.assertConsole(logger.transports.console);
       },
       "should throw an error when the same Transport is added": function (logger) {
-        assert.throws(function () { logger.add(winston.transports.Console) }, Error);
+        assert.throws(function () { logger.add(wilkins.transports.Console) }, Error);
       },
       "the profile() method": {
         "when passed a callback": {
@@ -196,7 +196,7 @@ vows.describe('winton/logger').addBatch({
       },
       "and adding an additional transport": {
         topic: function (logger) {
-          return logger.add(winston.transports.File, {
+          return logger.add(wilkins.transports.File, {
             filename: path.join(__dirname, 'fixtures', 'logs', 'testfile2.log')
           });
         },
@@ -209,11 +209,11 @@ vows.describe('winton/logger').addBatch({
     }
   }
 }).addBatch({
-  "The winston logger": {
-    topic: new (winston.Logger)({
+  "The wilkins logger": {
+    topic: new (wilkins.Logger)({
       transports: [
-        new (winston.transports.Console)(),
-        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+        new (wilkins.transports.Console)(),
+        new (wilkins.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
       ]
     }),
     "should return have two transports": function (logger) {
@@ -221,12 +221,12 @@ vows.describe('winton/logger').addBatch({
     },
     "the remove() with an unadded transport": {
       "should throw an Error": function (logger) {
-        assert.throws(function () { logger.remove(winston.transports.Http) }, Error);
+        assert.throws(function () { logger.remove(wilkins.transports.Http) }, Error);
       }
     },
     "the remove() method with an added transport": {
       topic: function (logger) {
-         return logger.remove(winston.transports.Console);
+         return logger.remove(wilkins.transports.Console);
       },
       "should remove the Console transport from transports": function (logger) {
         assert.equal(helpers.size(logger.transports), 1);
@@ -234,7 +234,7 @@ vows.describe('winton/logger').addBatch({
       },
       "and removing an additional transport": {
         topic: function (logger) {
-           return logger.remove(winston.transports.File);
+           return logger.remove(wilkins.transports.File);
         },
         "should remove File transport from transports": function (logger) {
           assert.equal(helpers.size(logger.transports), 0);
@@ -243,11 +243,11 @@ vows.describe('winton/logger').addBatch({
     }
   }
 }).addBatch({
-  "The winston logger": {
-    topic: new (winston.Logger)({
+  "The wilkins logger": {
+    topic: new (wilkins.Logger)({
       transports: [
-        new (winston.transports.Console)(),
-        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+        new (wilkins.transports.Console)(),
+        new (wilkins.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
       ]
     }),
     "the clear() method": {
@@ -258,11 +258,11 @@ vows.describe('winton/logger').addBatch({
     }
   }
 }).addBatch({
-  "The winston logger": {
-    topic: new (winston.Logger)({
+  "The wilkins logger": {
+    topic: new (wilkins.Logger)({
       exceptionHandlers: [
-        new (winston.transports.Console)(),
-        new (winston.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
+        new (wilkins.transports.Console)(),
+        new (wilkins.transports.File)({ filename: path.join(__dirname, 'fixtures', 'logs', 'filelog.log' )})
       ]
     }),
     "the unhandleExceptions() method": {
@@ -274,10 +274,10 @@ vows.describe('winton/logger').addBatch({
     }
   }
 }).addBatch({
-  "The winston logger": {
-    topic: new (winston.Logger)({
+  "The wilkins logger": {
+    topic: new (wilkins.Logger)({
       transports: [
-        new (winston.transports.Console)()
+        new (wilkins.transports.Console)()
       ]
     }),
     "the log() method": {
@@ -447,14 +447,14 @@ vows.describe('winton/logger').addBatch({
   }
 }).addBatch({
   "Building a logger with two file transports": {
-    topic: new (winston.Logger)({
+    topic: new (wilkins.Logger)({
       transports: [
-        new (winston.transports.File)({
+        new (wilkins.transports.File)({
           name: 'filelog-info.log',
           filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-info.log'),
           level: 'info'
         }),
-        new (winston.transports.File)({
+        new (wilkins.transports.File)({
           name: 'filelog-error.log',
           filename: path.join(__dirname, 'fixtures', 'logs', 'filelog-error.log'),
           level: 'error'

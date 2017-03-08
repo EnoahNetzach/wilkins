@@ -1,7 +1,7 @@
 /*
  * file-maxfiles-test.js: Tests for instances of the File transport setting the max file size,
  * and setting a number for max files created.
- * maxSize * maxFiles = total storage used by winston.
+ * maxSize * maxFiles = total storage used by wilkins.
  *
  * (C) 2011 Daniel Aristizabal
  * MIT LICENSE
@@ -13,10 +13,10 @@ var assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
-    winston = require('../../lib/winston'),
+    wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers');
 
-var maxfilesTransport = new winston.transports.File({
+var maxfilesTransport = new wilkins.transports.File({
   timestamp: false,
   json: false,
   filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxfiles.log'),
@@ -24,7 +24,7 @@ var maxfilesTransport = new winston.transports.File({
   maxFiles: 3
 });
 
-vows.describe('winston/transports/file/maxfiles').addBatch({
+vows.describe('wilkins/transports/file/maxfiles').addBatch({
   "An instance of the File Transport": {
     "when passed a valid filename": {
       topic: maxfilesTransport,
@@ -51,7 +51,7 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
           function logKbytes(kbytes, txt) {
             //
             // With no timestamp and at the info level,
-            // winston adds exactly 7 characters:
+            // wilkins adds exactly 7 characters:
             // [info](4)[ :](2)[\n](1)
             //
             for (var i = 0; i < kbytes; i++) {
@@ -92,7 +92,7 @@ vows.describe('winston/transports/file/maxfiles').addBatch({
             var counter = inx + 3,
                 logsDir = path.join(__dirname, '..', 'fixtures', 'logs'),
                 content = fs.readFileSync(path.join(logsDir, 'testmaxfiles' + counter + '.log'), 'utf-8');
-            // The content minus the 7 characters added by winston
+            // The content minus the 7 characters added by wilkins
             assert.lengthOf(content.match(new RegExp(name, 'g')), 4068);
           });
         }

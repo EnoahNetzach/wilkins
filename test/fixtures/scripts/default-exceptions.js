@@ -1,5 +1,5 @@
 /*
- * default-exceptions.js: A test fixture for logging exceptions with the default winston logger.
+ * default-exceptions.js: A test fixture for logging exceptions with the default wilkins logger.
  *
  * (C) 2011 Charlie Robbins
  * MIT LICENCE
@@ -7,10 +7,10 @@
  */
  
 var path = require('path'),
-    winston = require('../../../lib/winston');
+    wilkins = require('../../../lib/wilkins');
 
-winston.handleExceptions([
-  new (winston.transports.File)({ 
+wilkins.handleExceptions([
+  new (wilkins.transports.File)({
     filename: path.join(__dirname, '..', 'logs', 'default-exception.log'),
     handleExceptions: true
   })

@@ -1,8 +1,8 @@
-var winston = require('../lib/winston');
+var wilkins = require('../lib/wilkins');
 
-var logger = module.exports = new (winston.Logger)({
+var logger = module.exports = new (wilkins.Logger)({
   transports: [
-    new (winston.transports.Console)({
+    new (wilkins.transports.Console)({
       colorize: 'all'
     })
   ]

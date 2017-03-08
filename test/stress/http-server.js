@@ -5,12 +5,12 @@
 
 var http = require('http'),
     path = require('path'),
-    winston = require('../../lib/winston');
+    wilkins = require('../../lib/wilkins');
 
-var logger = new (winston.Logger)({
+var logger = new (wilkins.Logger)({
   transports: [
-    new (winston.transports.Console)(),
-    new (winston.transports.File)({ filename: path.join(__dirname, '..', 'fixtures', 'logs', 'http-stress.log') })
+    new (wilkins.transports.Console)(),
+    new (wilkins.transports.File)({ filename: path.join(__dirname, '..', 'fixtures', 'logs', 'http-stress.log') })
   ]
 });
 

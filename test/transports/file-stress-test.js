@@ -11,9 +11,9 @@ var assert = require('assert'),
     os  = require('os'),
     path = require('path'),
     vows = require('vows'),
-    winston = require('../../lib/winston');
+    wilkins = require('../../lib/wilkins');
 
-vows.describe('winston/transports/file').addBatch({
+vows.describe('wilkins/transports/file').addBatch({
     'A stressed instance of the File Transport': {
         topic: function () {
             var callback = this.callback.bind(this),
@@ -25,10 +25,10 @@ vows.describe('winston/transports/file').addBatch({
                 if (ex && ex.code !== 'ENOENT') { return callback(ex); }
             }
 
-            var fileTransport = new (winston.transports.File)({
+            var fileTransport = new (wilkins.transports.File)({
                     filename: logPath
                 }),
-                logger = new (winston.Logger)({
+                logger = new (wilkins.Logger)({
                     transports: [fileTransport]
                 });
 

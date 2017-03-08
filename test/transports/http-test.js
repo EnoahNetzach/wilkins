@@ -9,7 +9,7 @@ var path = require('path'),
     http = require('http'),
     fs = require('fs'),
     assert = require('assert'),
-    winston = require('../../lib/winston'),
+    wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers'),
     hock = require('hock');
 
@@ -17,7 +17,7 @@ var transport = require('./transport');
 
 var host = '127.0.0.1';
 
-vows.describe('winston/transports/http').addBatch({
+vows.describe('wilkins/transports/http').addBatch({
   "When the HTTP endpoint": {
     topic: function () {
       var mock = this.mock = hock.createHock(),
@@ -47,7 +47,7 @@ vows.describe('winston/transports/http').addBatch({
 
       var port = this.server.address().port;
         var self = this,
-            httpTransport = new (winston.transports.Http)({
+            httpTransport = new (wilkins.transports.Http)({
               host: host,
               port: port,
               path: 'log'

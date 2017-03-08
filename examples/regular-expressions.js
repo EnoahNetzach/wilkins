@@ -1,7 +1,7 @@
-var winston = require('../');
+var wilkins = require('../');
 
 console.info(new RegExp('a'));
 // prints "/a/"
 
-winston.info(new RegExp('a'));
+wilkins.info(new RegExp('a'));
 // prints "info: /a/"

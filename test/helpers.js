@@ -1,5 +1,5 @@
 /*
- * helpers.js: Test helpers for winston
+ * helpers.js: Test helpers for wilkins
  *
  * (C) 2010 Charlie Robbins
  * MIT LICENSE
@@ -12,7 +12,7 @@ var assert = require('assert'),
     spawn = require('child_process').spawn,
     util = require('util'),
     vows = require('vows'),
-    winston = require('../lib/winston');
+    wilkins = require('../lib/wilkins');
 
 var helpers = exports;
 
@@ -64,7 +64,7 @@ helpers.assertTrace = function (trace) {
 };
 
 helpers.assertLogger = function (logger, level) {
-  assert.instanceOf(logger, winston.Logger);
+  assert.instanceOf(logger, wilkins.Logger);
   assert.isFunction(logger.log);
   assert.isFunction(logger.add);
   assert.isFunction(logger.remove);
@@ -75,22 +75,22 @@ helpers.assertLogger = function (logger, level) {
 };
 
 helpers.assertConsole = function (transport) {
-  assert.instanceOf(transport, winston.transports.Console);
+  assert.instanceOf(transport, wilkins.transports.Console);
   assert.isFunction(transport.log);
 };
 
 helpers.assertMemory = function (transport) {
-  assert.instanceOf(transport, winston.transports.Memory);
+  assert.instanceOf(transport, wilkins.transports.Memory);
   assert.isFunction(transport.log);
 };
 
 helpers.assertFile = function (transport) {
-  assert.instanceOf(transport, winston.transports.File);
+  assert.instanceOf(transport, wilkins.transports.File);
   assert.isFunction(transport.log);
 };
 
 helpers.assertCouchdb = function (transport) {
-  assert.instanceOf(transport, winston.transports.Couchdb);
+  assert.instanceOf(transport, wilkins.transports.Couchdb);
   assert.isFunction(transport.log);
 };
 
@@ -143,11 +143,11 @@ helpers.assertFailedTransport = function (transport) {
 };
 
 helpers.testNpmLevels = function (transport, assertMsg, assertFn) {
-  return helpers.testLevels(winston.config.npm.levels, transport, assertMsg, assertFn);
+  return helpers.testLevels(wilkins.config.npm.levels, transport, assertMsg, assertFn);
 };
 
 helpers.testSyslogLevels = function (transport, assertMsg, assertFn) {
-  return helpers.testLevels(winston.config.syslog.levels, transport, assertMsg, assertFn);
+  return helpers.testLevels(wilkins.config.syslog.levels, transport, assertMsg, assertFn);
 };
 
 helpers.testLevels = function (levels, transport, assertMsg, assertFn) {
@@ -202,7 +202,7 @@ helpers.assertOptionsThrow = function (options, errMsg) {
     assert.throws(
       function () {
         try {
-          new (winston.transports.Console)(options);
+          new (wilkins.transports.Console)(options);
         } catch (err) {
           throw(err);
         }

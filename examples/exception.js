@@ -1,4 +1,4 @@
-var winston = require('../');
-winston.handleExceptions(new winston.transports.Console({ colorize: true, json: true }));
+var wilkins = require('../');
+wilkins.handleExceptions(new wilkins.transports.Console({ colorize: true, json: true }));
 
-throw new Error('Hello, winston!');
+throw new Error('Hello, wilkins!');

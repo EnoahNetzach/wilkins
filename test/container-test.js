@@ -11,18 +11,18 @@ var assert = require('assert'),
     http = require('http'),
     path = require('path'),
     vows = require('vows'),
-    winston = require('../lib/winston'),
+    wilkins = require('../lib/wilkins'),
     helpers = require('./helpers');
 
-vows.describe('winston/container').addBatch({
-  "An instance of winston.Container": {
-    topic: new winston.Container(),
+vows.describe('wilkins/container').addBatch({
+  "An instance of wilkins.Container": {
+    topic: new wilkins.Container(),
     "the add() method": {
       topic: function (container) {
         return container.add('default-test');
       },
       "should correctly instantiate a Logger": function (logger) {
-        assert.instanceOf(logger, winston.Logger);
+        assert.instanceOf(logger, wilkins.Logger);
       },
       "the get() method": {
         topic: function (logger, container) {
@@ -55,16 +55,16 @@ vows.describe('winston/container').addBatch({
       }
     }
   },
-  "An instance of winston.Container with explicit transports": {
+  "An instance of wilkins.Container with explicit transports": {
     topic: function () {
       this.port = 9412;
       this.transports = [
-        new winston.transports.Http({
+        new wilkins.transports.Http({
           port: this.port
         })
       ];
 
-      this.container = new winston.Container({
+      this.container = new wilkins.Container({
         transports: this.transports
       });
 
@@ -81,7 +81,7 @@ vows.describe('winston/container').addBatch({
       "should add the logger correctly": function () {
         this.someLogger = this.container.get('some-logger');
         assert.isObject(this.someLogger.transports);
-        assert.instanceOf(this.someLogger.transports['http'], winston.transports.Http);
+        assert.instanceOf(this.someLogger.transports['http'], wilkins.transports.Http);
         assert.strictEqual(this.someLogger.transports['http'], this.transports[0]);
       },
       "a second call to get()": {
@@ -89,7 +89,7 @@ vows.describe('winston/container').addBatch({
           this.someOtherLogger = this.container.get('some-other-logger');
 
           assert.isObject(this.someOtherLogger.transports);
-          assert.instanceOf(this.someOtherLogger.transports['http'], winston.transports.Http);
+          assert.instanceOf(this.someOtherLogger.transports['http'], wilkins.transports.Http);
           assert.strictEqual(this.someOtherLogger.transports['http'], this.transports[0]);
           assert.strictEqual(this.someOtherLogger.transports['http'], this.someLogger.transports['http']);
         }

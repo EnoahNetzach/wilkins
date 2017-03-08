@@ -2,10 +2,10 @@ var assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
-    winston = require('../../lib/winston'),
+    wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers');
 
-var maxfilesTransport = new winston.transports.File({
+var maxfilesTransport = new wilkins.transports.File({
   timestamp: false,
   json: false,
   filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testtailrollingfiles.log'),
@@ -19,7 +19,7 @@ process.on('uncaughtException', function (err) {
   console.error(err);
 });
 
-vows.describe('winston/transports/file/tailrolling').addBatch({
+vows.describe('wilkins/transports/file/tailrolling').addBatch({
   "An instance of the File Transport": {
     "when delete old test files": {
       topic: function () {
@@ -44,7 +44,7 @@ vows.describe('winston/transports/file/tailrolling').addBatch({
           function logKbytes(kbytes, txt) {
             //
             // With no timestamp and at the info level,
-            // winston adds exactly 7 characters:
+            // wilkins adds exactly 7 characters:
             // [info](4)[ :](2)[\n](1)
             //
             for (var i = 0; i < kbytes; i++) {

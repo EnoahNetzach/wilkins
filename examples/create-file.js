@@ -1,7 +1,7 @@
 
 var fs = require('fs'),
     path = require('path'),
-    winston = require('../lib/winston');
+    wilkins = require('../lib/wilkins');
 
 var filename = path.join(__dirname, 'created-logfile.log');
 
@@ -12,13 +12,13 @@ try { fs.unlinkSync(filename); }
 catch (ex) { }
 
 //
-// Create a new winston logger instance with two tranports: Console, and File
+// Create a new wilkins logger instance with two tranports: Console, and File
 //
 //
-var logger = new (winston.Logger)({
+var logger = new (wilkins.Logger)({
   transports: [
-    new (winston.transports.Console)(),
-    new (winston.transports.File)({ filename: filename })
+    new (wilkins.transports.Console)(),
+    new (wilkins.transports.File)({ filename: filename })
   ]
 });
 
