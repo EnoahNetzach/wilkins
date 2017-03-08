@@ -11,13 +11,6 @@ module.exports = function (transport, options) {
         ]
       });
 
-  // hack to fix transports that don't log
-  // any unit of time smaller than seconds
-  var common = require('../../lib/winston/common');
-  common.timestamp = function() {
-    return new Date().toISOString();
-  };
-
   var transport = logger.transports[logger._names[0]];
 
   var out = {
