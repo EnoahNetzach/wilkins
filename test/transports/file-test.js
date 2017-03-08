@@ -12,20 +12,21 @@ var path = require('path'),
     assert = require('assert'),
     wilkins = require('../../lib/wilkins'),
     stdMocks = require('std-mocks'),
-    helpers = require('../helpers');
+    helpers = require('../helpers'),
+    File = require('../../lib/transports/file').File;
 
 var transport = require('./transport');
 
 var stream = fs.createWriteStream(
       path.join(__dirname, '..', 'fixtures', 'logs', 'testfile.log')
     ),
-    fileTransport = new (wilkins.transports.File)({
+    fileTransport = new File({
       filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfilename.log')
     }),
-    failedFileTransport = new (wilkins.transports.File)({
+    failedFileTransport = new File({
       filename: path.join(__dirname, '..', 'fixtures', 'logs', 'dir404', 'testfile.log')
     }),
-    streamTransport = new (wilkins.transports.File)({ stream: stream });
+    streamTransport = new File({ stream: stream });
 
 vows.describe('wilkins/transports/file').addBatch({
   "An instance of the File Transport": {
@@ -57,7 +58,7 @@ vows.describe('wilkins/transports/file').addBatch({
     },
     "streaming to stdout": {
       topic: function () {
-        var transport = new (wilkins.transports.File)({
+        var transport = new File({
           stream: process.stdout, timestamp: false, json: false
         });
         stdMocks.use();
@@ -128,7 +129,7 @@ vows.describe('wilkins/transports/file').addBatch({
     }
   }
 }).addBatch({
-  "An instance of the File Transport": transport(wilkins.transports.File, {
+  "An instance of the File Transport": transport(File, {
     filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testfile.log')
   })
 }).export(module);

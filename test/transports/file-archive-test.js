@@ -7,14 +7,15 @@
  */
 
 var assert = require('assert'),
-  exec = require('child_process').exec,
-  fs = require('fs'),
-  path = require('path'),
-  vows = require('vows'),
-  wilkins = require('../../lib/wilkins'),
-  helpers = require('../helpers');
+    exec = require('child_process').exec,
+    fs = require('fs'),
+    path = require('path'),
+    vows = require('vows'),
+    wilkins = require('../../lib/wilkins'),
+    helpers = require('../helpers'),
+    File = require('../../lib/transports/file').File;
 
-var archiveTransport = new wilkins.transports.File({
+var archiveTransport = new File({
   timestamp: true,
   json: false,
   zippedArchive: true,

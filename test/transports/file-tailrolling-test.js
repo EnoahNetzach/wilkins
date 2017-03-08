@@ -3,9 +3,10 @@ var assert = require('assert'),
     path = require('path'),
     vows = require('vows'),
     wilkins = require('../../lib/wilkins'),
-    helpers = require('../helpers');
+    helpers = require('../helpers'),
+    File = require('../../lib/transports/file').File;
 
-var maxfilesTransport = new wilkins.transports.File({
+var maxfilesTransport = new File({
   timestamp: false,
   json: false,
   filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testtailrollingfiles.log'),

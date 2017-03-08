@@ -11,9 +11,9 @@ var path = require('path'),
     assert = require('assert'),
     wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers'),
-    hock = require('hock');
-
-var transport = require('./transport');
+    hock = require('hock'),
+    transport = require('./transport'),
+    Http = require('../../lib/transports/http').Http;
 
 var host = '127.0.0.1';
 
@@ -47,7 +47,7 @@ vows.describe('wilkins/transports/http').addBatch({
 
       var port = this.server.address().port;
         var self = this,
-            httpTransport = new (wilkins.transports.Http)({
+            httpTransport = new Http({
               host: host,
               port: port,
               path: 'log'

@@ -12,7 +12,10 @@ var assert = require('assert'),
     spawn = require('child_process').spawn,
     util = require('util'),
     vows = require('vows'),
-    wilkins = require('../lib/wilkins');
+    wilkins = require('../lib/wilkins'),
+    Console = require('../lib/transports/console').Console,
+    Memory = require('../lib/transports/memory').Memory,
+    File = require('../lib/transports/file').File;
 
 var helpers = exports;
 
@@ -75,22 +78,22 @@ helpers.assertLogger = function (logger, level) {
 };
 
 helpers.assertConsole = function (transport) {
-  assert.instanceOf(transport, wilkins.transports.Console);
+  assert.instanceOf(transport, Console);
   assert.isFunction(transport.log);
 };
 
 helpers.assertMemory = function (transport) {
-  assert.instanceOf(transport, wilkins.transports.Memory);
+  assert.instanceOf(transport, Memory);
   assert.isFunction(transport.log);
 };
 
 helpers.assertFile = function (transport) {
-  assert.instanceOf(transport, wilkins.transports.File);
+  assert.instanceOf(transport, File);
   assert.isFunction(transport.log);
 };
 
 helpers.assertCouchdb = function (transport) {
-  assert.instanceOf(transport, wilkins.transports.Couchdb);
+  assert.instanceOf(transport, undefined);
   assert.isFunction(transport.log);
 };
 
@@ -202,7 +205,7 @@ helpers.assertOptionsThrow = function (options, errMsg) {
     assert.throws(
       function () {
         try {
-          new (wilkins.transports.Console)(options);
+          new Console(options);
         } catch (err) {
           throw(err);
         }

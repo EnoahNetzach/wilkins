@@ -10,13 +10,14 @@ var assert = require('assert'),
     vows = require('vows'),
     wilkins = require('../lib/wilkins'),
     util = require('util'),
-    helpers = require('./helpers');
+    helpers = require('./helpers'),
+    Console = require('../lib/transports/console').Console;
 
 vows.describe('wilkins/logger/levels').addBatch({
   "The wilkins logger": {
     topic: new (wilkins.Logger)({
       transports: [
-        new (wilkins.transports.Console)()
+        new Console()
       ]
     }),
     "the info() method": {

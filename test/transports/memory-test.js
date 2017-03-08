@@ -2,10 +2,11 @@ var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
     wilkins = require('../../lib/wilkins'),
-    helpers = require('../helpers');
+    helpers = require('../helpers'),
+    Memory = require('../../lib/transports/memory').Memory;
 
-var npmTransport = new (wilkins.transports.Memory)(),
-    syslogTransport = new (wilkins.transports.Memory)({ levels: wilkins.config.syslog.levels });
+var npmTransport = new Memory(),
+    syslogTransport = new Memory({ levels: wilkins.config.syslog.levels });
 
 vows.describe('wilkins/transports/memory').addBatch({
   "An instance of the Memory Transport": {

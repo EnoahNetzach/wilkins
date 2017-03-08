@@ -6,7 +6,8 @@
 var assert = require('assert'),
     vows = require('vows'),
     wilkins = require('../lib/wilkins'),
-    helpers = require('./helpers');
+    helpers = require('./helpers'),
+    Console = require('../lib/transports/console').Console;
 
 /* To demo a filter, we filter out credit card numbers, assuming that a credit
  * card number consists of 13 or more digits (without spaces). This function
@@ -45,7 +46,7 @@ function maskSecrets(msg, meta) {
 vows.describe('wilkins/logger/filter').addBatch({
   "An instance of wilkins.Logger": {
     topic: new (wilkins.Logger)({transports: [
-      new (wilkins.transports.Console)({ level: 'info' })
+      new Console({ level: 'info' })
     ]}),
     "the filters.push() method, adding a filter only for the message": {
       topic: function (logger) {
@@ -72,7 +73,7 @@ vows.describe('wilkins/logger/filter').addBatch({
 }).addBatch({
   "A fresh instance of wilkins.Logger": {
     topic: new (wilkins.Logger)({
-      transports: [new (wilkins.transports.Console)({ level: 'info' })]
+      transports: [new Console({ level: 'info' })]
     }),
     "the filters.push() method adding a filter for the message and metadata": {
       topic: function (logger) {

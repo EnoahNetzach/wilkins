@@ -12,6 +12,7 @@ var assert = require('assert'),
     path = require('path'),
     vows = require('vows'),
     wilkins = require('../lib/wilkins'),
+    Http = require('../lib/transports/http').Http,
     helpers = require('./helpers');
 
 vows.describe('wilkins/container').addBatch({
@@ -59,7 +60,7 @@ vows.describe('wilkins/container').addBatch({
     topic: function () {
       this.port = 9412;
       this.transports = [
-        new wilkins.transports.Http({
+        new Http({
           port: this.port
         })
       ];
@@ -81,7 +82,7 @@ vows.describe('wilkins/container').addBatch({
       "should add the logger correctly": function () {
         this.someLogger = this.container.get('some-logger');
         assert.isObject(this.someLogger.transports);
-        assert.instanceOf(this.someLogger.transports['http'], wilkins.transports.Http);
+        assert.instanceOf(this.someLogger.transports['http'], Http);
         assert.strictEqual(this.someLogger.transports['http'], this.transports[0]);
       },
       "a second call to get()": {
@@ -89,7 +90,7 @@ vows.describe('wilkins/container').addBatch({
           this.someOtherLogger = this.container.get('some-other-logger');
 
           assert.isObject(this.someOtherLogger.transports);
-          assert.instanceOf(this.someOtherLogger.transports['http'], wilkins.transports.Http);
+          assert.instanceOf(this.someOtherLogger.transports['http'], Http);
           assert.strictEqual(this.someOtherLogger.transports['http'], this.transports[0]);
           assert.strictEqual(this.someOtherLogger.transports['http'], this.someLogger.transports['http']);
         }

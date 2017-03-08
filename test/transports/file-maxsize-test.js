@@ -12,9 +12,10 @@ var assert = require('assert'),
     path = require('path'),
     vows = require('vows'),
     wilkins = require('../../lib/wilkins'),
-    helpers = require('../helpers');
+    helpers = require('../helpers'),
+    File = require('../../lib/transports/file').File;
 
-var maxsizeTransport = new wilkins.transports.File({
+var maxsizeTransport = new File({
   timestamp: false,
   json: false,
   filename: path.join(__dirname, '..', 'fixtures', 'logs', 'testmaxsize.log'),

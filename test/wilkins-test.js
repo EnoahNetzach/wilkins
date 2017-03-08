@@ -12,7 +12,8 @@ var fs = require('fs'),
     http = require('http'),
     assert = require('assert'),
     wilkins = require('../lib/wilkins'),
-    helpers = require('./helpers');
+    helpers = require('./helpers'),
+    Console = require('../lib/transports/console').Console;
 
 vows.describe('wilkins').addBatch({
   "The wilkins module": {
@@ -21,11 +22,7 @@ vows.describe('wilkins').addBatch({
       return null;
     },
     "should have the correct methods defined": function () {
-      assert.isObject(wilkins.transports);
       assert.isFunction(wilkins.Transport);
-      assert.isTrue(!wilkins.transports.Transport);
-      assert.isFunction(wilkins.transports.Console);
-      assert.isFunction(wilkins.transports.File);
       assert.isObject(wilkins.default.transports.console);
       assert.isFalse(wilkins.emitErrs);
       assert.isObject(wilkins.config);
@@ -57,8 +54,7 @@ vows.describe('wilkins').addBatch({
         return null;
       },
       "should have the proper methods defined": function () {
-        assert.isObject(wilkins.transports);
-        assert.isFunction(wilkins.transports.Console);
+        assert.isFunction(Console);
         assert.isObject(wilkins.default.transports.console);
         assert.isFalse(wilkins.emitErrs);
         assert.isObject(wilkins.config);

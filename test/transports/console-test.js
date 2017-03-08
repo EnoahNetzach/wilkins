@@ -11,15 +11,16 @@ var path = require('path'),
     assert = require('assert'),
     wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers'),
-    stdMocks = require('std-mocks');
+    stdMocks = require('std-mocks'),
+   Console = require('../../lib/transports/console').Console;
 
-var npmTransport = new (wilkins.transports.Console)(),
-    syslogTransport = new (wilkins.transports.Console)({ levels: wilkins.config.syslog.levels }),
-    alignTransport = new (wilkins.transports.Console)({ showLevel: true, align: true }),
-    defaultTransport = new (wilkins.transports.Console)(),
-    rawTransport = new (wilkins.transports.Console)({ level: 'verbose', raw: true }),
-    debugStdoutTransport = new (wilkins.transports.Console)({ debugStdout: true }),
-    stderrLevelsTransport = new (wilkins.transports.Console)({ stderrLevels: ['info', 'warn'] }),
+var npmTransport = new Console(),
+    syslogTransport = new Console({ levels: wilkins.config.syslog.levels }),
+    alignTransport = new Console({ showLevel: true, align: true }),
+    defaultTransport = new Console(),
+    rawTransport = new Console({ level: 'verbose', raw: true }),
+    debugStdoutTransport = new Console({ debugStdout: true }),
+    stderrLevelsTransport = new Console({ stderrLevels: ['info', 'warn'] }),
     customLevels = {
       alpha: 0,
       beta: 1,
@@ -27,11 +28,11 @@ var npmTransport = new (wilkins.transports.Console)(),
       delta: 3,
       epsilon: 4,
     },
-    customLevelsAndStderrTransport = new (wilkins.transports.Console)({
+    customLevelsAndStderrTransport = new Console({
       levels: customLevels,
       stderrLevels: ['delta', 'epsilon']
     }),
-    noStderrTransport = new (wilkins.transports.Console)({ stderrLevels: [] });
+    noStderrTransport = new Console({ stderrLevels: [] });
 
 vows.describe('wilkins/transports/console').addBatch({
   "An instance of the Console Transport": {

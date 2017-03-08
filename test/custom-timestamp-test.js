@@ -12,6 +12,7 @@ var assert = require('assert'),
     path = require('path'),
     vows = require('vows'),
     wilkins = require('../lib/wilkins'),
+    File = require('../lib/transports/file').File,
     helpers = require('./helpers');
 
 function assertTimestamp (basename, options) {
@@ -23,7 +24,7 @@ function assertTimestamp (basename, options) {
   return {
     topic: function () {
       options.filename = filename;
-      var transport = new (wilkins.transports.File)(options);
+      var transport = new File(options);
 
       // We must wait until transport file has emitted the 'flush' 
       // event to be sure the file has been created and written

@@ -10,13 +10,14 @@ var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
     wilkins = require('../lib/wilkins'),
+    Console = require('../lib/transports/console').Console,
     helpers = require('./helpers');
 
 vows.describe('wilkins/logger/cli').addBatch({
-  "When an instance of wilkins.transports.Console()": {
+  "When an instance of Console()": {
     "has colorize true": {
       topic: function () {
-        var transport = new wilkins.transports.Console({ colorize: true });
+        var transport = new Console({ colorize: true });
         transport.log('prompt', 'This had better work.', { test: true }, this.callback);
       },
       "should function without error": function (err, ok) {
@@ -29,7 +30,7 @@ vows.describe('wilkins/logger/cli').addBatch({
     topic: function () {
       return new wilkins.Logger({
         transports: [
-          new wilkins.transports.Console()
+          new Console()
         ]
       })
     },

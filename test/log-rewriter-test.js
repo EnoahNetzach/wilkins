@@ -9,12 +9,13 @@
 var assert = require('assert'),
     vows = require('vows'),
     wilkins = require('../lib/wilkins'),
-    helpers = require('./helpers');
+    helpers = require('./helpers'),
+    Console = require('../lib/transports/console').Console;
 
 vows.describe('wilkins/logger/rewriter').addBatch({
   "An instance of wilkins.Logger": {
     topic: new (wilkins.Logger)({transports: [
-      new (wilkins.transports.Console)({ level: 'info' })
+      new Console({ level: 'info' })
     ]}),
     "the addRewriter() method": {
       topic: function (logger) {
@@ -47,7 +48,7 @@ vows.describe('wilkins/logger/rewriter').addBatch({
 }).addBatch({
   "An instance of wilkins.Logger with explicit rewriter": {
     topic: new (wilkins.Logger)({transports: [
-      new (wilkins.transports.Console)({ level: 'info'})
+      new Console({ level: 'info'})
     ], rewriters: [
       function (level, msg, meta) {
         meta.level = level;
@@ -75,7 +76,7 @@ vows.describe('wilkins/logger/rewriter').addBatch({
 }).addBatch({
   "An instance of wilkins.Logger with rewriters": {
     topic: new (wilkins.Logger)({transports: [
-      new (wilkins.transports.Console)({ level: 'info' })
+      new Console({ level: 'info' })
     ], rewriters: [
       function (level, msg, meta) {
         meta.numbers.push(1);

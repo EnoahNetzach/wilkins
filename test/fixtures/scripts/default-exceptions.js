@@ -7,10 +7,11 @@
  */
  
 var path = require('path'),
-    wilkins = require('../../../lib/wilkins');
+    wilkins = require('../../../lib/wilkins'),
+    File = require('../../../lib/transports/file').File;
 
 wilkins.handleExceptions([
-  new (wilkins.transports.File)({
+  new File({
     filename: path.join(__dirname, '..', 'logs', 'default-exception.log'),
     handleExceptions: true
   })
