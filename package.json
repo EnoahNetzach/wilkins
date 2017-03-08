@@ -1,7 +1,7 @@
 {
   "name": "wilkins",
   "description": "A multi-transport async logging library for JavaScript",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "Enoah Netzach <f.castellarin@gmail.com>",
   "maintainers": [
     "Enoah Netzach <f.castellarin@gmail.com>"
@@ -9,6 +9,7 @@
   "repository": "https://github.com/EnoahNetzach/wilkins.git",
   "keywords": [
     "wilkins",
+    "winston",
     "logging",
     "sysadmin",
     "tools"
