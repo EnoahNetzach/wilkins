@@ -1,16 +1,12 @@
 {
-  "name": "winston",
-  "description": "A multi-transport async logging library for Node.js",
-  "version": "2.3.1",
-  "author": "Charlie Robbins <charlie.robbins@gmail.com>",
+  "name": "wilkins",
+  "description": "A multi-transport async logging library for JavaScript",
+  "version": "0.0.0",
+  "author": "Enoah Netzach <f.castellarin@gmail.com>",
   "maintainers": [
-    "Jarrett Cruger <jcrugzz@gmail.com>",
-    "Alberto Pose <albertopose@gmail.com>"
+    "Enoah Netzach <f.castellarin@gmail.com>"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/winstonjs/winston.git"
-  },
+  "repository": "https://github.com/EnoahNetzach/wilkins.git",
   "keywords": [
     "winston",
     "logging",
@@ -31,12 +27,12 @@
     "std-mocks": "~1.0.0",
     "vows": "0.7.x"
   },
-  "main": "./lib/winston",
+  "main": "./lib/wilkins",
   "scripts": {
     "test": "vows --spec --isolate"
   },
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 4"
   },
   "license": "MIT"
 }
