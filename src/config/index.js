@@ -6,7 +6,7 @@
  *
  */
 
-var chalk = require('chalk')
+import chalk from 'chalk'
 
 // Fix colors not appearing in non-tty environments
 chalk.enabled = true

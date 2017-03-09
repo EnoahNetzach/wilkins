@@ -6,8 +6,8 @@
  *
  */
 
-var config = require('../config'),
-  longestElement = require('./longestElement')
+import config from '../config'
+import longestElement from './longestElement'
 
 //
 // ### function setLevels (target, past, current)

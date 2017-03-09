@@ -6,11 +6,11 @@
  *
  */
 
-var util = require('util'),
-  cycle = require('cycle'),
-  config = require('../config'),
-  clone = require('./clone'),
-  serialize = require('./serialize')
+import util from 'util'
+import cycle from 'cycle'
+import config from '../config'
+import clone from './clone'
+import serialize from './serialize'
 
 //
 // ### function log (options)

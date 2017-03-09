@@ -6,9 +6,9 @@
  *
  */
 
-var fs = require('fs'),
-  StringDecoder = require('string_decoder').StringDecoder,
-  Stream = require('stream').Stream
+import fs from 'fs'
+import { StringDecoder } from 'string_decoder'
+import { Stream } from 'stream'
 
 //
 // ### function tailFile (options, callback)
@@ -46,10 +46,10 @@ module.exports = function (options, callback) {
       return
     }
 
-    (function read() {
+    function read() {
       if (stream.destroyed) {
         fs.close(fd)
-        return
+        return undefined
       }
 
       return fs.read(fd, buffer, 0, buffer.length, pos, (err, bytes) => {
@@ -60,7 +60,7 @@ module.exports = function (options, callback) {
             callback(err)
           }
           stream.destroy()
-          return
+          return undefined
         }
 
         if (!bytes) {
@@ -105,7 +105,9 @@ module.exports = function (options, callback) {
 
         return read()
       })
-    }())
+    }
+
+    read()
   })
 
   if (!callback) {

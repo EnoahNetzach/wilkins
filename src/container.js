@@ -6,10 +6,10 @@
  *
  */
 
-var capitalize = require('./common/capitalize'),
-    wilkins = require('./wilkins'),
-    extend = require('util')._extend,
-    Console = require('./transports/console').Console;
+import capitalize from './common/capitalize'
+import wilkins from './wilkins'
+import { _extend as extend } from 'util'
+import { Console } from './transports/console'
 
 //
 // ### function Container (options)
@@ -18,17 +18,17 @@ var capitalize = require('./common/capitalize'),
 // a set of `wilkins.Logger` instances based on string ids.
 //
 var Container = exports.Container = function (options) {
-  this.loggers = {};
-  this.options = options || {};
+  this.loggers = {}
+  this.options = options || {}
   this.default = {
     transports: [
       new Console({
         level: 'silly',
-        colorize: false
-      })
-    ]
+        colorize: false,
+      }),
+    ],
   }
-};
+}
 
 //
 // ### function get / add (id, options)
@@ -39,51 +39,51 @@ var Container = exports.Container = function (options) {
 //
 Container.prototype.get = Container.prototype.add = function (id, options) {
   var self = this,
-      existing;
+    existing
 
   if (!this.loggers[id]) {
     //
     // Remark: Simple shallow clone for configuration options in case we pass in
     // instantiated protoypal objects
     //
-    options = extend({}, options || this.options || this.default);
-    existing = options.transports || this.options.transports;
+    options = extend({}, options || this.options || this.default)
+    existing = options.transports || this.options.transports
     //
     // Remark: Make sure if we have an array of transports we slice it to make copies
     // of those references.
     //
-    options.transports = existing ? existing.slice() : [];
+    options.transports = existing ? existing.slice() : []
 
-    if (options.transports.length === 0 && (!options || !options['console'])) {
-      options.transports.push(this.default.transports[0]);
+    if (options.transports.length === 0 && (!options || !options.console)) {
+      options.transports.push(this.default.transports[0])
     }
 
-    Object.keys(options).forEach(function (key) {
+    Object.keys(options).forEach((key) => {
       if (key === 'transports') {
-        return;
+        return
       }
 
-      var name = capitalize(key);
+      var name = capitalize(key)
 
       if (!wilkins.transports[name]) {
-        throw new Error('Cannot add unknown transport: ' + name);
+        throw new Error(`Cannot add unknown transport: ${name}`)
       }
 
-      var namedOptions = options[key];
-      namedOptions.id = id;
-      options.transports.push(new (wilkins.transports[name])(namedOptions));
-    });
+      var namedOptions = options[key]
+      namedOptions.id = id
+      options.transports.push(new wilkins.transports[name](namedOptions))
+    })
 
-    options.id = id;
-    this.loggers[id] = new wilkins.Logger(options);
+    options.id = id
+    this.loggers[id] = new wilkins.Logger(options)
 
-    this.loggers[id].on('close', function () {
-        self._delete(id);
-    });
+    this.loggers[id].on('close', () => {
+      self._delete(id)
+    })
   }
 
-  return this.loggers[id];
-};
+  return this.loggers[id]
+}
 
 //
 // ### function close (id)
@@ -92,8 +92,8 @@ Container.prototype.get = Container.prototype.add = function (id, options) {
 // has a logger with the specified `id`.
 //
 Container.prototype.has = function (id) {
-  return !!this.loggers[id];
-};
+  return !!this.loggers[id]
+}
 
 //
 // ### function close (id)
@@ -102,21 +102,21 @@ Container.prototype.has = function (id) {
 // If no `id` is supplied then all Loggers are closed.
 //
 Container.prototype.close = function (id) {
-  var self = this;
+  var self = this
 
-  function _close (id) {
+  function _close(id) {
     if (!self.loggers[id]) {
-      return;
+      return
     }
 
-    self.loggers[id].close();
-    self._delete(id);
+    self.loggers[id].close()
+    self._delete(id)
   }
 
-  return id ? _close(id) : Object.keys(this.loggers).forEach(function (id) {
-    _close(id);
-  });
-};
+  return id ? _close(id) : Object.keys(this.loggers).forEach((id) => {
+    _close(id)
+  })
+}
 
 //
 // ### @private function _delete (id)
@@ -124,6 +124,5 @@ Container.prototype.close = function (id) {
 // Deletes a `Logger` instance with the specified `id`.
 //
 Container.prototype._delete = function (id) {
-    delete this.loggers[id];
+  delete this.loggers[id]
 }
-

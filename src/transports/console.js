@@ -6,12 +6,11 @@
  *
  */
 
-var events = require('events'),
-  os = require('os'),
-  util = require('util'),
-  stringArrayToSet = require('../common/stringArrayToSet'),
-  log = require('../common/log'),
-  Transport = require('./transport').Transport
+import os from 'os'
+import util from 'util'
+import stringArrayToSet from '../common/stringArrayToSet'
+import log from '../common/log'
+import { Transport } from './transport'
 
 //
 // ### function Console (options)

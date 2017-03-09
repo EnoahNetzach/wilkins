@@ -38,7 +38,7 @@
   "scripts": {
     "build": "babel src --out-dir lib",
     "eslint": "eslint src",
-    "format": "prettier-eslint --write src/**/*.js",
+    "format": "prettier-eslint --write src/*.js src/**/*.js",
     "prepublish": "yarn format",
     "pretest": "yarn build",
     "test": "vows --spec --isolate"

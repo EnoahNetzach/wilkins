@@ -1,9 +1,9 @@
-var util = require('util'),
-  wilkins = require('../wilkins'),
-  http = require('http'),
-  https = require('https'),
-  Stream = require('stream').Stream,
-  Transport = require('./transport').Transport
+import util from 'util'
+import wilkins from '../wilkins'
+import http from 'http'
+import https from 'https'
+import { Stream } from 'stream'
+import { Transport } from './transport'
 
 //
 // ### function Http (options)

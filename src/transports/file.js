@@ -6,18 +6,17 @@
  *
  */
 
-var events = require('events'),
-  fs = require('fs'),
-  path = require('path'),
-  util = require('util'),
-  async = require('async'),
-  zlib = require('zlib'),
-  log = require('../common/log'),
-  tailFile = require('../common/tailFile'),
-  Transport = require('./transport').Transport,
-  isWritable = require('isstream').isWritable,
-  Stream = require('stream').Stream,
-  os = require('os')
+import fs from 'fs'
+import path from 'path'
+import util from 'util'
+import async from 'async'
+import zlib from 'zlib'
+import { isWritable } from 'isstream'
+import { Stream } from 'stream'
+import os from 'os'
+import log from '../common/log'
+import tailFile from '../common/tailFile'
+import { Transport } from './transport'
 
 //
 // ### function File (options)
@@ -453,9 +452,9 @@ File.prototype.flush = function () {
 //
 File.prototype._createStream = function () {
   var self = this
-  this.opening = true;
+  this.opening = true
 
-  (function checkFile(target) {
+  function checkFile(target) {
     var fullname = path.join(self.dirname, target)
 
     //
@@ -545,7 +544,9 @@ File.prototype._createStream = function () {
 
       createAndFlush(stats.size)
     })
-  }(this._getFile()))
+  }
+
+  checkFile(this._getFile())
 }
 
 File.prototype._incFile = function (callback) {

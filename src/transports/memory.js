@@ -1,7 +1,6 @@
-var events = require('events'),
-  util = require('util'),
-  log = require('../common/log'),
-  Transport = require('./transport').Transport
+import util from 'util'
+import log from '../common/log'
+import { Transport } from './transport'
 
 //
 // ### function Memory (options)

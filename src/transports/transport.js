@@ -6,8 +6,8 @@
  *
  */
 
-var events = require('events'),
-  util = require('util')
+import events from 'events'
+import util from 'util'
 
 //
 // ### function Transport (options)
