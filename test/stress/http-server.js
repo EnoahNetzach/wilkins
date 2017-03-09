@@ -5,9 +5,9 @@
 
 var http = require('http'),
     path = require('path'),
-    wilkins = require('../../src/wilkins'),
-    File = require('../../src/transports/file').File,
-    Console = require('../../src/transports/console').Console;
+    wilkins = require('../../lib/wilkins'),
+    File = require('../../lib/transports/file').File,
+    Console = require('../../lib/transports/console').Console;
 
 var logger = new (wilkins.Logger)({
   transports: [

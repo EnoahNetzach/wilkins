@@ -11,5 +11,5 @@
 // Returns a timestamp string for the current time.
 //
 module.exports = function () {
-  return new Date().toISOString();
-};
+  return new Date().toISOString()
+}

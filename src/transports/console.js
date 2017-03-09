@@ -7,11 +7,11 @@
  */
 
 var events = require('events'),
-    os = require('os'),
-    util = require('util'),
-    stringArrayToSet = require('../common/stringArrayToSet'),
-    log = require('../common/log'),
-    Transport = require('./transport').Transport;
+  os = require('os'),
+  util = require('util'),
+  stringArrayToSet = require('../common/stringArrayToSet'),
+  log = require('../common/log'),
+  Transport = require('./transport').Transport
 
 //
 // ### function Console (options)
@@ -20,25 +20,26 @@ var events = require('events'),
 // for persisting log messages and metadata to a terminal or TTY.
 //
 var Console = exports.Console = function (options) {
-  Transport.call(this, options);
-  options = options || {};
+  Transport.call(this, options)
+  options = options || {}
 
-  this.json         = options.json        || false;
-  this.colorize     = options.colorize    || false;
-  this.prettyPrint  = options.prettyPrint || false;
-  this.timestamp    = typeof options.timestamp !== 'undefined' ? options.timestamp : false;
-  this.showLevel    = options.showLevel === undefined ? true : options.showLevel;
-  this.label        = options.label       || null;
-  this.logstash     = options.logstash    || false;
-  this.depth        = options.depth       || null;
-  this.align        = options.align       || false;
-  this.stderrLevels = setStderrLevels(options.stderrLevels, options.debugStdout);
-  this.eol          = options.eol   || os.EOL;
+  this.json = options.json || false
+  this.colorize = options.colorize || false
+  this.prettyPrint = options.prettyPrint || false
+  this.timestamp = typeof options.timestamp !== 'undefined' ? options.timestamp : false
+  this.showLevel = options.showLevel === undefined ? true : options.showLevel
+  this.label = options.label || null
+  this.logstash = options.logstash || false
+  this.depth = options.depth || null
+  this.align = options.align || false
+  this.stderrLevels = setStderrLevels(options.stderrLevels, options.debugStdout)
+  this.eol = options.eol || os.EOL
 
   if (this.json) {
-    this.stringify = options.stringify || function (obj) {
-      return JSON.stringify(obj, null, 2);
-    };
+    this.stringify = options.stringify ||
+      function (obj) {
+        return JSON.stringify(obj, null, 2)
+      }
   }
 
   //
@@ -47,39 +48,39 @@ var Console = exports.Console = function (options) {
   // For backwards compatibility, stderrLevels defaults to ['error', 'debug']
   // or ['error'] depending on whether options.debugStdout is true.
   //
-  function setStderrLevels (levels, debugStdout) {
-    var defaultMsg = 'Cannot have non-string elements in stderrLevels Array';
+  function setStderrLevels(levels, debugStdout) {
+    var defaultMsg = 'Cannot have non-string elements in stderrLevels Array'
     if (debugStdout) {
       if (levels) {
         //
         // Don't allow setting both debugStdout and stderrLevels together,
         // since this could cause behaviour a programmer might not expect.
         //
-        throw new Error('Cannot set debugStdout and stderrLevels together');
+        throw new Error('Cannot set debugStdout and stderrLevels together')
       }
 
-      return stringArrayToSet(['error'], defaultMsg);
+      return stringArrayToSet(['error'], defaultMsg)
     }
 
     if (!levels) {
-      return stringArrayToSet(['error', 'debug'], defaultMsg);
-    } else if (!(Array.isArray(levels))) {
-      throw new Error('Cannot set stderrLevels to type other than Array');
+      return stringArrayToSet(['error', 'debug'], defaultMsg)
+    } else if (!Array.isArray(levels)) {
+      throw new Error('Cannot set stderrLevels to type other than Array')
     }
 
-    return stringArrayToSet(levels, defaultMsg);
-  };
-};
+    return stringArrayToSet(levels, defaultMsg)
+  }
+}
 
 //
 // Inherit from `wilkins.Transport`.
 //
-util.inherits(Console, Transport);
+util.inherits(Console, Transport)
 
 //
 // Expose the name of this Transport on the prototype
 //
-Console.prototype.name = 'console';
+Console.prototype.name = 'console'
 
 //
 // ### function log (level, msg, [meta], callback)
@@ -91,49 +92,47 @@ Console.prototype.name = 'console';
 //
 Console.prototype.log = function (level, msg, meta, callback) {
   if (this.silent) {
-    return callback(null, true);
+    return callback(null, true)
   }
 
   var self = this,
-      output;
+    output
 
   output = log({
-    colorize:    this.colorize,
-    json:        this.json,
-    level:       level,
-    message:     msg,
-    meta:        meta,
-    stringify:   this.stringify,
-    timestamp:   this.timestamp,
-    showLevel:   this.showLevel,
+    colorize: this.colorize,
+    json: this.json,
+    level,
+    message: msg,
+    meta,
+    stringify: this.stringify,
+    timestamp: this.timestamp,
+    showLevel: this.showLevel,
     prettyPrint: this.prettyPrint,
-    raw:         this.raw,
-    label:       this.label,
-    logstash:    this.logstash,
-    depth:       this.depth,
-    formatter:   this.formatter,
-    align:       this.align,
-    humanReadableUnhandledException: this.humanReadableUnhandledException
-  });
+    raw: this.raw,
+    label: this.label,
+    logstash: this.logstash,
+    depth: this.depth,
+    formatter: this.formatter,
+    align: this.align,
+    humanReadableUnhandledException: this.humanReadableUnhandledException,
+  })
 
   if (this.stderrLevels[level]) {
     if (process && typeof process.stderr !== 'undefined') {
-      process.stderr.write(output + this.eol);
+      process.stderr.write(output + this.eol)
     } else {
       console.error(output)
     }
+  } else if (process && typeof process.stdout !== 'undefined') {
+    process.stdout.write(output + this.eol)
   } else {
-    if (process && typeof process.stdout !== 'undefined') {
-      process.stdout.write(output + this.eol);
-    } else {
-      console.log(output)
-    }
+    console.log(output)
   }
 
   //
   // Emit the `logged` event immediately because the event loop
   // will not exit until `process.stdout` has drained anyway.
   //
-  self.emit('logged');
-  callback(null, true);
-};
+  self.emit('logged')
+  callback(null, true)
+}

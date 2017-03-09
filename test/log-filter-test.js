@@ -5,9 +5,9 @@
 
 var assert = require('assert'),
     vows = require('vows'),
-    wilkins = require('../src/wilkins'),
+    wilkins = require('../lib/wilkins'),
     helpers = require('./helpers'),
-    Console = require('../src/transports/console').Console;
+    Console = require('../lib/transports/console').Console;
 
 /* To demo a filter, we filter out credit card numbers, assuming that a credit
  * card number consists of 13 or more digits (without spaces). This function

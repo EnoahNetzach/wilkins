@@ -6,7 +6,7 @@
  *
  */
 
-var crypto = require('crypto');
+var crypto = require('crypto')
 
 //
 // ### function hash (str)
@@ -15,5 +15,5 @@ var crypto = require('crypto');
 // e.g. Profiling incoming HTTP requests on the same tick
 //
 module.exports = function (str) {
-  return crypto.createHash('sha1').update(str).digest('hex');
-};
+  return crypto.createHash('sha1').update(str).digest('hex')
+}

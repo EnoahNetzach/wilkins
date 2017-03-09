@@ -9,10 +9,10 @@
 var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    wilkins = require('../../src/wilkins'),
+    wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers'),
     stdMocks = require('std-mocks'),
-   Console = require('../../src/transports/console').Console;
+   Console = require('../../lib/transports/console').Console;
 
 var npmTransport = new Console(),
     syslogTransport = new Console({ levels: wilkins.config.syslog.levels }),

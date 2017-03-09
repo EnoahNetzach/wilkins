@@ -9,11 +9,11 @@ var path = require('path'),
     http = require('http'),
     fs = require('fs'),
     assert = require('assert'),
-    wilkins = require('../../src/wilkins'),
+    wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers'),
     hock = require('hock'),
     transport = require('./transport'),
-    Http = require('../../src/transports/http').Http;
+    Http = require('../../lib/transports/http').Http;
 
 var host = '127.0.0.1';
 

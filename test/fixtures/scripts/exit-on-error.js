@@ -7,8 +7,8 @@
  */
  
 var path = require('path'),
-    wilkins = require('../../../src/wilkins'),
-    File = require('../../../src/transports/file').File;
+    wilkins = require('../../../lib/wilkins'),
+    File = require('../../../lib/transports/file').File;
 
 wilkins.exitOnError = function (err) {
   return err.message !== 'Ignore this error';

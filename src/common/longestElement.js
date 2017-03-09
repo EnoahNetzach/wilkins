@@ -12,8 +12,5 @@
 // Returns the longest element in the `xs` array.
 //
 module.exports = function (xs) {
-  return Math.max.apply(
-    null,
-    xs.map(function (x) { return x.length; })
-  );
-};
+  return Math.max.apply(null, xs.map(x => x.length))
+}

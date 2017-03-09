@@ -23,51 +23,47 @@ module.exports = function serialize(obj, key) {
   }
 
   if (obj === null) {
-    obj = 'null';
-  }
-  else if (obj === undefined) {
-    obj = 'undefined';
-  }
-  else if (obj === false) {
-    obj = 'false';
+    obj = 'null'
+  } else if (obj === undefined) {
+    obj = 'undefined'
+  } else if (obj === false) {
+    obj = 'false'
   }
 
   if (typeof obj !== 'object') {
-    return key ? key + '=' + obj : obj;
+    return key ? `${key}=${obj}` : obj
   }
 
   if (obj instanceof Buffer) {
-    return key ? key + '=' + obj.toString('base64') : obj.toString('base64');
+    return key ? `${key}=${obj.toString('base64')}` : obj.toString('base64')
   }
 
   var msg = '',
     keys = Object.keys(obj),
-    length = keys.length;
+    length = keys.length
 
   for (var i = 0; i < length; i++) {
     if (Array.isArray(obj[keys[i]])) {
-      msg += keys[i] + '=[';
+      msg += `${keys[i]}=[`
 
       for (var j = 0, l = obj[keys[i]].length; j < l; j++) {
-        msg += serialize(obj[keys[i]][j]);
+        msg += serialize(obj[keys[i]][j])
         if (j < l - 1) {
-          msg += ', ';
+          msg += ', '
         }
       }
 
-      msg += ']';
-    }
-    else if (obj[keys[i]] instanceof Date) {
-      msg += keys[i] + '=' + obj[keys[i]];
-    }
-    else {
-      msg += serialize(obj[keys[i]], keys[i]);
+      msg += ']'
+    } else if (obj[keys[i]] instanceof Date) {
+      msg += `${keys[i]}=${obj[keys[i]]}`
+    } else {
+      msg += serialize(obj[keys[i]], keys[i])
     }
 
     if (i < length - 1) {
-      msg += ', ';
+      msg += ', '
     }
   }
 
-  return msg;
-};
+  return msg
+}

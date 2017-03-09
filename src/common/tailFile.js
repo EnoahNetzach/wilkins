@@ -8,7 +8,7 @@
 
 var fs = require('fs'),
   StringDecoder = require('string_decoder').StringDecoder,
-  Stream = require('stream').Stream;
+  Stream = require('stream').Stream
 
 //
 // ### function tailFile (options, callback)
@@ -16,101 +16,101 @@ var fs = require('fs'),
 // #### @callback {function} Callback to execute on every line.
 // `tail -f` a file. Options must include file.
 //
-module.exports = function(options, callback) {
-  var buffer = new Buffer(64 * 1024)
-    , decode = new StringDecoder('utf8')
-    , stream = new Stream
-    , buff = ''
-    , pos = 0
-    , row = 0;
+module.exports = function (options, callback) {
+  var buffer = new Buffer(64 * 1024),
+    decode = new StringDecoder('utf8'),
+    stream = new Stream(),
+    buff = '',
+    pos = 0,
+    row = 0
 
   if (options.start === -1) {
-    delete options.start;
+    delete options.start
   }
 
-  stream.readable = true;
-  stream.destroy = function() {
-    stream.destroyed = true;
-    stream.emit('end');
-    stream.emit('close');
-  };
+  stream.readable = true
+  stream.destroy = function () {
+    stream.destroyed = true
+    stream.emit('end')
+    stream.emit('close')
+  }
 
-  fs.open(options.file, 'a+', '0644', function(err, fd) {
+  fs.open(options.file, 'a+', '0644', (err, fd) => {
     if (err) {
       if (!callback) {
-        stream.emit('error', err);
+        stream.emit('error', err)
       } else {
-        callback(err);
+        callback(err)
       }
-      stream.destroy();
-      return;
+      stream.destroy()
+      return
     }
 
     (function read() {
       if (stream.destroyed) {
-        fs.close(fd);
-        return;
+        fs.close(fd)
+        return
       }
 
-      return fs.read(fd, buffer, 0, buffer.length, pos, function(err, bytes) {
+      return fs.read(fd, buffer, 0, buffer.length, pos, (err, bytes) => {
         if (err) {
           if (!callback) {
-            stream.emit('error', err);
+            stream.emit('error', err)
           } else {
-            callback(err);
+            callback(err)
           }
-          stream.destroy();
-          return;
+          stream.destroy()
+          return
         }
 
         if (!bytes) {
           if (buff) {
             if (options.start == null || row > options.start) {
               if (!callback) {
-                stream.emit('line', buff);
+                stream.emit('line', buff)
               } else {
-                callback(null, buff);
+                callback(null, buff)
               }
             }
-            row++;
-            buff = '';
+            row++
+            buff = ''
           }
-          return setTimeout(read, 1000);
+          return setTimeout(read, 1000)
         }
 
-        var data = decode.write(buffer.slice(0, bytes));
+        var data = decode.write(buffer.slice(0, bytes))
 
         if (!callback) {
-          stream.emit('data', data);
+          stream.emit('data', data)
         }
 
-        var data = (buff + data).split(/\n+/)
-          , l = data.length - 1
-          , i = 0;
+        var data = (buff + data).split(/\n+/),
+          l = data.length - 1,
+          i = 0
 
         for (; i < l; i++) {
           if (options.start == null || row > options.start) {
             if (!callback) {
-              stream.emit('line', data[i]);
+              stream.emit('line', data[i])
             } else {
-              callback(null, data[i]);
+              callback(null, data[i])
             }
           }
-          row++;
+          row++
         }
 
-        buff = data[l];
+        buff = data[l]
 
-        pos += bytes;
+        pos += bytes
 
-        return read();
-      });
-    })();
-  });
+        return read()
+      })
+    }())
+  })
 
   if (!callback) {
-    return stream;
+    return stream
   }
 
-  return stream.destroy;
-};
+  return stream.destroy
+}

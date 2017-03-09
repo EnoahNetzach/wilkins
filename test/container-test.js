@@ -11,8 +11,8 @@ var assert = require('assert'),
     http = require('http'),
     path = require('path'),
     vows = require('vows'),
-    wilkins = require('../src/wilkins'),
-    Http = require('../src/transports/http').Http,
+    wilkins = require('../lib/wilkins'),
+    Http = require('../lib/transports/http').Http,
     helpers = require('./helpers');
 
 vows.describe('wilkins/container').addBatch({

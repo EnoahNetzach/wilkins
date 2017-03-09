@@ -13,9 +13,9 @@ var assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
-    wilkins = require('../../src/wilkins'),
+    wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers'),
-    File = require('../../src/transports/file').File;
+    File = require('../../lib/transports/file').File;
 
 var maxfilesTransport = new File({
   timestamp: false,

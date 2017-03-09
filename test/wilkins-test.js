@@ -11,9 +11,9 @@ var fs = require('fs'),
     vows = require('vows'),
     http = require('http'),
     assert = require('assert'),
-    wilkins = require('../src/wilkins'),
+    wilkins = require('../lib/wilkins'),
     helpers = require('./helpers'),
-    Console = require('../src/transports/console').Console;
+    Console = require('../lib/transports/console').Console;
 
 vows.describe('wilkins').addBatch({
   "The wilkins module": {

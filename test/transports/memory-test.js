@@ -1,9 +1,9 @@
 var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    wilkins = require('../../src/wilkins'),
+    wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers'),
-    Memory = require('../../src/transports/memory').Memory;
+    Memory = require('../../lib/transports/memory').Memory;
 
 var npmTransport = new Memory(),
     syslogTransport = new Memory({ levels: wilkins.config.syslog.levels });

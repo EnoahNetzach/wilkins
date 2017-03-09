@@ -1,10 +1,6 @@
 # wilkins
 
-[![Join the chat at https://gitter.im/wilkinsjs/wilkins](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/wilkinsjs/wilkins?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![Version npm](https://img.shields.io/npm/v/wilkins.svg?style=flat-square)](https://www.npmjs.com/package/wilkins)[![npm Downloads](https://img.shields.io/npm/dm/wilkins.svg?style=flat-square)](https://www.npmjs.com/package/wilkins)[![Build Status](https://img.shields.io/travis/wilkinsjs/wilkins/master.svg?style=flat-square)](https://travis-ci.org/wilkinsjs/wilkins)[![Dependencies](https://img.shields.io/david/wilkinsjs/wilkins.svg?style=flat-square)](https://david-dm.org/wilkinsjs/wilkins)
-
-[![NPM](https://nodei.co/npm/wilkins.png?downloads=true&downloadRank=true)](https://nodei.co/npm/wilkins/)
+[![Version npm](https://img.shields.io/npm/v/wilkins.svg?style=flat-square)](https://www.npmjs.com/package/wilkins)[![npm Downloads](https://img.shields.io/npm/dm/wilkins.svg?style=flat-square)](https://www.npmjs.com/package/wilkins)[![Build Status](https://img.shields.io/travis/EnoahNetzach/wilkins/master.svg?style=flat-square)](https://travis-ci.org/EnoahNetzach/wilkins)[![Dependencies](https://img.shields.io/david/EnoahNetzach/wilkins.svg?style=flat-square)](https://david-dm.org/EnoahNetzach/wilkins)
 
 A multi-transport async logging library for node.js. <span style="font-size:28px; font-weight:bold;">&quot;CHILL WILKINS! ... I put it in the logs.&quot;</span>
 
@@ -27,7 +23,7 @@ There are two different ways to use wilkins: directly via the default logger, or
   * [Instantiating your own Logger](#instantiating-your-own-logger)
   * [Logging with Metadata](#logging-with-metadata)
   * [String interpolation](#string-interpolation)
-* [Transports](https://github.com/wilkinsjs/wilkins/blob/master/docs/transports.md)
+* [Transports](https://github.com/EnoahNetzach/wilkins/blob/master/docs/transports.md)
   * [Multiple transports of the same type](#multiple-transports-of-the-same-type)
 * [Profiling](#profiling)
 * [Streaming Logs](#streaming-logs)

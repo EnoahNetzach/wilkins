@@ -12,10 +12,10 @@ var assert = require('assert'),
     spawn = require('child_process').spawn,
     util = require('util'),
     vows = require('vows'),
-    wilkins = require('../src/wilkins'),
-    Console = require('../src/transports/console').Console,
-    Memory = require('../src/transports/memory').Memory,
-    File = require('../src/transports/file').File;
+    wilkins = require('../lib/wilkins'),
+    Console = require('../lib/transports/console').Console,
+    Memory = require('../lib/transports/memory').Memory,
+    File = require('../lib/transports/file').File;
 
 var helpers = exports;
 

@@ -6,7 +6,7 @@
  *
  */
 
-var cliConfig = exports;
+var cliConfig = exports
 
 cliConfig.levels = {
   error: 0,
@@ -19,7 +19,7 @@ cliConfig.levels = {
   verbose: 7,
   input: 8,
   silly: 9,
-};
+}
 
 cliConfig.colors = {
   error: 'red',
@@ -31,5 +31,5 @@ cliConfig.colors = {
   prompt: 'grey',
   verbose: 'cyan',
   input: 'grey',
-  silly: 'magenta'
-};
+  silly: 'magenta',
+}

@@ -11,8 +11,8 @@ var assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
     vows = require('vows'),
-    wilkins = require('../src/wilkins'),
-    File = require('../src/transports/file').File,
+    wilkins = require('../lib/wilkins'),
+    File = require('../lib/transports/file').File,
     helpers = require('./helpers');
 
 function assertFileFormatter (basename, options) {

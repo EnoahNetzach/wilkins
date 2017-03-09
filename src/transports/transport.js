@@ -7,7 +7,7 @@
  */
 
 var events = require('events'),
-    util = require('util');
+  util = require('util')
 
 //
 // ### function Transport (options)
@@ -16,30 +16,30 @@ var events = require('events'),
 // base functionality for all wilkins transports.
 //
 var Transport = exports.Transport = function (options) {
-  events.EventEmitter.call(this);
+  events.EventEmitter.call(this)
 
-  options        = options        || {};
-  this.silent    = options.silent || false;
-  this.raw       = options.raw    || false;
-  this.name      = options.name   || this.name;
-  this.formatter = options.formatter;
+  options = options || {}
+  this.silent = options.silent || false
+  this.raw = options.raw || false
+  this.name = options.name || this.name
+  this.formatter = options.formatter
 
   //
   // Do not set a default level. When `level` is falsey on any
   // `Transport` instance, any `Logger` instance uses the
   // configured level (instead of the Transport level)
   //
-  this.level = options.level;
+  this.level = options.level
 
-  this.handleExceptions = options.handleExceptions || false;
-  this.exceptionsLevel  = options.exceptionsLevel || 'error';
-  this.humanReadableUnhandledException = options.humanReadableUnhandledException || false;
-};
+  this.handleExceptions = options.handleExceptions || false
+  this.exceptionsLevel = options.exceptionsLevel || 'error'
+  this.humanReadableUnhandledException = options.humanReadableUnhandledException || false
+}
 
 //
 // Inherit from `events.EventEmitter`.
 //
-util.inherits(Transport, events.EventEmitter);
+util.inherits(Transport, events.EventEmitter)
 
 //
 // ### function formatQuery (query)
@@ -48,8 +48,8 @@ util.inherits(Transport, events.EventEmitter);
 // with the underlying implementation of this transport.
 //
 Transport.prototype.formatQuery = function (query) {
-  return query;
-};
+  return query
+}
 
 //
 // ### function normalizeQuery (query)
@@ -62,35 +62,34 @@ Transport.prototype.normalizeQuery = function (options) {
   // [See Loggly Search API](http://wiki.loggly.com/retrieve_events#optional)
   //
 
-  options = options || {};
+  options = options || {}
 
   // limit
-  options.rows = options.rows || options.limit || 10;
+  options.rows = options.rows || options.limit || 10
 
   // starting row offset
-  options.start = options.start || 0;
+  options.start = options.start || 0
 
   // now
-  options.until = options.until || new Date;
+  options.until = options.until || new Date()
   if (typeof options.until !== 'object') {
-    options.until = new Date(options.until);
+    options.until = new Date(options.until)
   }
 
   // now - 24
-  options.from = options.from || (options.until - (24 * 60 * 60 * 1000));
+  options.from = options.from || options.until - 24 * 60 * 60 * 1000
   if (typeof options.from !== 'object') {
-    options.from = new Date(options.from);
+    options.from = new Date(options.from)
   }
 
-
   // 'asc' or 'desc'
-  options.order = options.order || 'desc';
+  options.order = options.order || 'desc'
 
   // which fields to select
-  options.fields = options.fields;
+  options.fields = options.fields
 
-  return options;
-};
+  return options
+}
 
 //
 // ### function formatResults (results, options)
@@ -100,8 +99,8 @@ Transport.prototype.normalizeQuery = function (options) {
 // to the implementation of this transport.
 //
 Transport.prototype.formatResults = function (results, options) {
-  return results;
-};
+  return results
+}
 
 //
 // ### function logException (msg, meta, callback)
@@ -114,22 +113,22 @@ Transport.prototype.formatResults = function (results, options) {
 //
 Transport.prototype.logException = function (msg, meta, callback) {
   var self = this,
-      called;
+    called
 
   if (this.silent) {
-    return callback();
+    return callback()
   }
 
-  function onComplete () {
+  function onComplete() {
     if (!called) {
-      called = true;
-      self.removeListener('logged', onComplete);
-      self.removeListener('error', onComplete);
-      callback();
+      called = true
+      self.removeListener('logged', onComplete)
+      self.removeListener('error', onComplete)
+      callback()
     }
   }
 
-  this.once('logged', onComplete);
-  this.once('error', onComplete);
-  this.log(self.exceptionsLevel, msg, meta, function () { });
-};
+  this.once('logged', onComplete)
+  this.once('error', onComplete)
+  this.log(self.exceptionsLevel, msg, meta, () => {})
+}

@@ -6,7 +6,7 @@
  *
  */
 
-var syslogConfig = exports;
+var syslogConfig = exports
 
 syslogConfig.levels = {
   emerg: 0,
@@ -16,8 +16,8 @@ syslogConfig.levels = {
   warning: 4,
   notice: 5,
   info: 6,
-  debug: 7
-};
+  debug: 7,
+}
 
 syslogConfig.colors = {
   emerg: 'red',
@@ -27,5 +27,5 @@ syslogConfig.colors = {
   warning: 'red',
   notice: 'yellow',
   info: 'green',
-  debug: 'blue'
-};
+  debug: 'blue',
+}

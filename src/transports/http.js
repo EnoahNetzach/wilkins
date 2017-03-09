@@ -1,9 +1,9 @@
 var util = require('util'),
-    wilkins = require('../wilkins'),
-    http = require('http'),
-    https = require('https'),
-    Stream = require('stream').Stream,
-    Transport = require('./transport').Transport;
+  wilkins = require('../wilkins'),
+  http = require('http'),
+  https = require('https'),
+  Stream = require('stream').Stream,
+  Transport = require('./transport').Transport
 
 //
 // ### function Http (options)
@@ -12,28 +12,28 @@ var util = require('util'),
 // for persisting log messages and metadata to a terminal or TTY.
 //
 var Http = exports.Http = function (options) {
-  Transport.call(this, options);
-  options = options || {};
+  Transport.call(this, options)
+  options = options || {}
 
-  this.name = 'http';
-  this.ssl = !!options.ssl;
-  this.host = options.host || 'localhost';
-  this.port = options.port;
-  this.auth = options.auth;
-  this.path = options.path || '';
-  this.agent = options.agent;
+  this.name = 'http'
+  this.ssl = !!options.ssl
+  this.host = options.host || 'localhost'
+  this.port = options.port
+  this.auth = options.auth
+  this.path = options.path || ''
+  this.agent = options.agent
 
   if (!this.port) {
-    this.port = this.ssl ? 443 : 80;
+    this.port = this.ssl ? 443 : 80
   }
-};
+}
 
-util.inherits(Http, wilkins.Transport);
+util.inherits(Http, wilkins.Transport)
 
 //
 // Expose the name of this Transport on the prototype
 //
-Http.prototype.name = 'http';
+Http.prototype.name = 'http'
 
 //
 // ### function _request (options, callback)
@@ -42,43 +42,43 @@ Http.prototype.name = 'http';
 // handle json-rpc.
 //
 Http.prototype._request = function (options, callback) {
-  options = options || {};
+  options = options || {}
 
   var auth = options.auth || this.auth,
-      path = options.path || this.path || '',
-      req;
+    path = options.path || this.path || '',
+    req
 
-  delete options.auth;
-  delete options.path;
+  delete options.auth
+  delete options.path
 
   // Prepare options for outgoing HTTP request
   req = (this.ssl ? https : http).request({
     host: this.host,
     port: this.port,
-    path: '/' + path.replace(/^\//, ''),
+    path: `/${path.replace(/^\//, '')}`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     agent: this.agent,
-    auth: (auth) ? auth.username + ':' + auth.password : ''
-  });
+    auth: auth ? `${auth.username}:${auth.password}` : '',
+  })
 
-  req.on('error', callback);
-  req.on('response', function (res) {
-    var body = '';
+  req.on('error', callback)
+  req.on('response', (res) => {
+    var body = ''
 
-    res.on('data', function (chunk) {
-      body += chunk;
-    });
+    res.on('data', (chunk) => {
+      body += chunk
+    })
 
-    res.on('end', function () {
-      callback(null, res, body);
-    });
+    res.on('end', () => {
+      callback(null, res, body)
+    })
 
-    res.resume();
-  });
+    res.resume()
+  })
 
-  req.end(new Buffer(JSON.stringify(options), 'utf8'));
-};
+  req.end(new Buffer(JSON.stringify(options), 'utf8'))
+}
 
 //
 // ### function log (level, msg, [meta], callback)
@@ -89,48 +89,48 @@ Http.prototype._request = function (options, callback) {
 // Core logging method exposed to Wilkins. Metadata is optional.
 //
 Http.prototype.log = function (level, msg, meta, callback) {
-  var self = this;
+  var self = this
 
   if (typeof meta === 'function') {
-    callback = meta;
-    meta = {};
+    callback = meta
+    meta = {}
   }
 
   var options = {
     method: 'collect',
     params: {
-      level: level,
+      level,
       message: msg,
-      meta: meta
-    }
-  };
+      meta,
+    },
+  }
 
   if (meta) {
     if (meta.path) {
-      options.path = meta.path;
-      delete meta.path;
+      options.path = meta.path
+      delete meta.path
     }
 
     if (meta.auth) {
-      options.auth = meta.auth;
-      delete meta.auth;
+      options.auth = meta.auth
+      delete meta.auth
     }
   }
 
-  this._request(options, function (err, res) {
+  this._request(options, (err, res) => {
     if (res && res.statusCode !== 200) {
-      err = new Error('HTTP Status Code: ' + res.statusCode);
+      err = new Error(`HTTP Status Code: ${res.statusCode}`)
     }
 
-    if (err) return callback(err);
+    if (err) return callback(err)
 
     // TODO: emit 'logged' correctly,
     // keep track of pending logs.
-    self.emit('logged');
+    self.emit('logged')
 
-    if (callback) callback(null, true);
-  });
-};
+    if (callback) callback(null, true)
+  })
+}
 
 //
 // ### function query (options, callback)
@@ -140,46 +140,46 @@ Http.prototype.log = function (level, msg, meta, callback) {
 //
 Http.prototype.query = function (options, callback) {
   if (typeof options === 'function') {
-    callback = options;
-    options = {};
+    callback = options
+    options = {}
   }
 
   var self = this,
-      options = this.normalizeQuery(options);
+    options = this.normalizeQuery(options)
 
   options = {
     method: 'query',
-    params: options
-  };
+    params: options,
+  }
 
   if (options.params.path) {
-    options.path = options.params.path;
-    delete options.params.path;
+    options.path = options.params.path
+    delete options.params.path
   }
 
   if (options.params.auth) {
-    options.auth = options.params.auth;
-    delete options.params.auth;
+    options.auth = options.params.auth
+    delete options.params.auth
   }
 
-  this._request(options, function (err, res, body) {
+  this._request(options, (err, res, body) => {
     if (res && res.statusCode !== 200) {
-      err = new Error('HTTP Status Code: ' + res.statusCode);
+      err = new Error(`HTTP Status Code: ${res.statusCode}`)
     }
 
-    if (err) return callback(err);
+    if (err) return callback(err)
 
     if (typeof body === 'string') {
       try {
-        body = JSON.parse(body);
+        body = JSON.parse(body)
       } catch (e) {
-        return callback(e);
+        return callback(e)
       }
     }
 
-    callback(null, body);
-  });
-};
+    callback(null, body)
+  })
+}
 
 //
 // ### function stream (options)
@@ -187,54 +187,54 @@ Http.prototype.query = function (options, callback) {
 // Returns a log stream for this transport. Options object is optional.
 //
 Http.prototype.stream = function (options) {
-  options = options || {};
-  
+  options = options || {}
+
   var self = this,
-      stream = new Stream,
-      req,
-      buff;
+    stream = new Stream(),
+    req,
+    buff
 
   stream.destroy = function () {
-    req.destroy();
-  };
+    req.destroy()
+  }
 
   options = {
     method: 'stream',
-    params: options
-  };
+    params: options,
+  }
 
   if (options.params.path) {
-    options.path = options.params.path;
-    delete options.params.path;
+    options.path = options.params.path
+    delete options.params.path
   }
 
   if (options.params.auth) {
-    options.auth = options.params.auth;
-    delete options.params.auth;
+    options.auth = options.params.auth
+    delete options.params.auth
   }
 
-  req = this._request(options);
-  buff = '';
+  req = this._request(options)
+  buff = ''
 
-  req.on('data', function (data) {
+  req.on('data', (data) => {
     var data = (buff + data).split(/\n+/),
-        l = data.length - 1,
-        i = 0;
+      l = data.length - 1,
+      i = 0
 
     for (; i < l; i++) {
       try {
-        stream.emit('log', JSON.parse(data[i]));
+        stream.emit('log', JSON.parse(data[i]))
       } catch (e) {
-        stream.emit('error', e);
+        stream.emit('error', e)
       }
     }
 
-    buff = data[l];
-  });
+    buff = data[l]
+  })
 
-  req.on('error', function (err) {
-    stream.emit('error', err);
-  });
+  req.on('error', (err) => {
+    stream.emit('error', err)
+  })
 
-  return stream;
-};
+  return stream
+}

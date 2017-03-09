@@ -14,13 +14,16 @@
 //
 module.exports = function (strArray, errMsg) {
   if (typeof errMsg === 'undefined') {
-    errMsg = 'Cannot make set from Array with non-string elements';
+    errMsg = 'Cannot make set from Array with non-string elements'
   }
-  return strArray.reduce(function (set, el) {
-    if (!(typeof el === 'string' || el instanceof String)) {
-      throw new Error(errMsg);
-    }
-    set[el] = true;
-    return set;
-  }, Object.create(null));
-};
+  return strArray.reduce(
+    (set, el) => {
+      if (!(typeof el === 'string' || el instanceof String)) {
+        throw new Error(errMsg)
+      }
+      set[el] = true
+      return set
+    },
+    Object.create(null),
+  )
+}

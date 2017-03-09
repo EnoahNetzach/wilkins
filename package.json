@@ -23,13 +23,24 @@
     "stack-trace": "0.0.x"
   },
   "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-preset-env": "^1.2.1",
     "cross-spawn-async": "^2.0.0",
+    "eslint": "^3.17.1",
+    "eslint-config-airbnb-base": "^11.1.1",
+    "eslint-plugin-import": "^2.2.0",
     "hock": "1.x.x",
+    "prettier-eslint-cli": "^3.1.2",
     "std-mocks": "~1.0.0",
     "vows": "0.7.x"
   },
-  "main": "./src/wilkins",
+  "main": "./lib/wilkins",
   "scripts": {
+    "build": "babel src --out-dir lib",
+    "eslint": "eslint src",
+    "format": "prettier-eslint --write src/**/*.js",
+    "prepublish": "yarn format",
+    "pretest": "yarn build",
     "test": "vows --spec --isolate"
   },
   "engines": {

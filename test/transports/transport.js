@@ -1,5 +1,5 @@
 var assert = require('assert'),
-    wilkins = require('../../src/wilkins'),
+    wilkins = require('../../lib/wilkins'),
     helpers = require('../helpers');
 
 module.exports = function (transport, options) {

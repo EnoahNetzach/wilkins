@@ -11,8 +11,8 @@ var assert = require('assert'),
     os  = require('os'),
     path = require('path'),
     vows = require('vows'),
-    wilkins = require('../../src/wilkins'),
-    File = require('../../src/transports/file').File;
+    wilkins = require('../../lib/wilkins'),
+    File = require('../../lib/transports/file').File;
 
 vows.describe('wilkins/transports/file').addBatch({
     'A stressed instance of the File Transport': {

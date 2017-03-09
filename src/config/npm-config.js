@@ -6,7 +6,7 @@
  *
  */
 
-var npmConfig = exports;
+var npmConfig = exports
 
 npmConfig.levels = {
   error: 0,
@@ -14,8 +14,8 @@ npmConfig.levels = {
   info: 2,
   verbose: 3,
   debug: 4,
-  silly: 5
-};
+  silly: 5,
+}
 
 npmConfig.colors = {
   error: 'red',
@@ -23,5 +23,5 @@ npmConfig.colors = {
   info: 'green',
   verbose: 'cyan',
   debug: 'blue',
-  silly: 'magenta'
-};
+  silly: 'magenta',
+}

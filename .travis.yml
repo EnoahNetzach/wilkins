@@ -1,23 +1,15 @@
-sudo: false
 language: node_js
 node_js:
-  - "0.10"
-  - "0.12"
-  - "4.6"
-  - "6.9"
-
+  - 4
+  - 6
+  - 7
+cache:
+  directories:
+  - node_modules
+  - $HOME/.yarn-cache
 before_install:
-  - travis_retry npm install
-
+  - npm i -g yarn
+install:
+  - yarn --pure-lock
 script:
-  - npm test
-
-matrix:
-  allow_failures:
-    - node_js: "0.10"
-    - node_js: "0.12"
-
-notifications:
-  email:
-    - travis@nodejitsu.com
-  irc: "irc.freenode.org#nodejitsu"
+  - yarn test
