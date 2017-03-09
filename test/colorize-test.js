@@ -9,7 +9,7 @@
 var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    wilkins = require('../lib/wilkins'),
+    wilkins = require('../src/wilkins'),
     spawn = require('cross-spawn-async');
 
 var spawnTest = function(colorize, cb) {

@@ -10,10 +10,10 @@ var path = require('path'),
     vows = require('vows'),
     fs = require('fs'),
     assert = require('assert'),
-    wilkins = require('../../lib/wilkins'),
+    wilkins = require('../../src/wilkins'),
     stdMocks = require('std-mocks'),
     helpers = require('../helpers'),
-    File = require('../../lib/transports/file').File;
+    File = require('../../src/transports/file').File;
 
 var transport = require('./transport');
 

@@ -1,4 +1,4 @@
-var wilkins = require('../lib/wilkins');
+var wilkins = require('../src/wilkins');
 
 //
 // Create a new wilkins logger instance with two tranports: Console, and Couchdb

@@ -8,9 +8,9 @@
 
 var assert = require('assert'),
     vows = require('vows'),
-    wilkins = require('../lib/wilkins'),
+    wilkins = require('../src/wilkins'),
     helpers = require('./helpers'),
-    Console = require('../lib/transports/console').Console;
+    Console = require('../src/transports/console').Console;
 
 vows.describe('wilkins/logger/rewriter').addBatch({
   "An instance of wilkins.Logger": {

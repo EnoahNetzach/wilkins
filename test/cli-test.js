@@ -9,8 +9,8 @@
 var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    wilkins = require('../lib/wilkins'),
-    Console = require('../lib/transports/console').Console,
+    wilkins = require('../src/wilkins'),
+    Console = require('../src/transports/console').Console,
     helpers = require('./helpers');
 
 vows.describe('wilkins/logger/cli').addBatch({

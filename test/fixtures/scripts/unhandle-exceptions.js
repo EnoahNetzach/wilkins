@@ -7,8 +7,8 @@
  */
  
 var path = require('path'),
-    wilkins = require('../../../lib/wilkins'),
-    File = require('../../../lib/transports/file').File;
+    wilkins = require('../../../src/wilkins'),
+    File = require('../../../src/transports/file').File;
 
 var logger = new (wilkins.Logger)({
   transports: [

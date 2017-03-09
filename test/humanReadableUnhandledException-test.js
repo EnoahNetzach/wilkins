@@ -8,8 +8,8 @@
 
 var assert = require('assert'),
     vows = require('vows'),
-    wilkins = require('../lib/wilkins'),
-    Memory = require('../lib/transports/memory').Memory;
+    wilkins = require('../src/wilkins'),
+    Memory = require('../src/transports/memory').Memory;
 
 vows.describe('wilkins/transport/humanReadableUnhandledException').addBatch({
   "When humanReadableUnhandledException option is used": {

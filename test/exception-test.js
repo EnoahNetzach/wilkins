@@ -9,7 +9,7 @@
 var path = require('path'),
     vows = require('vows'),
     assert = require('assert'),
-    wilkins = require('../lib/wilkins'),
+    wilkins = require('../src/wilkins'),
     helpers = require('./helpers');
 
 vows.describe('wilkins/exception').addBatch({

@@ -11,7 +11,7 @@ var assert = require('assert'),
     fs = require('fs'),
     spawn = require('child_process').spawn,
     vows = require('vows'),
-    wilkins = require('../lib/wilkins'),
+    wilkins = require('../src/wilkins'),
     helpers = require('./helpers'),
     exists = (fs.exists || path.exists);
 

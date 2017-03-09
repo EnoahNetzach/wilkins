@@ -1,4 +1,4 @@
-var wilkins = require('../lib/wilkins');
+var wilkins = require('../src/wilkins');
 
 function myPrettyPrint(obj) {
   return JSON.stringify(obj)

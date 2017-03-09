@@ -11,11 +11,11 @@ var assert = require('assert'),
     util = require('util'),
     stdMocks = require('std-mocks'),
     vows = require('vows'),
-    wilkins = require('../lib/wilkins'),
+    wilkins = require('../src/wilkins'),
     helpers = require('./helpers'),
     transport = require('./transports/transport'),
-    Console = require('../lib/transports/console').Console,
-    File = require('../lib/transports/file').File;
+    Console = require('../src/transports/console').Console,
+    File = require('../src/transports/file').File;
 
 vows.describe('winton/logger').addBatch({
   "An instance of wilkins.Logger": {

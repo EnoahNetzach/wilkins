@@ -1,7 +1,7 @@
 
 var fs = require('fs'),
     path = require('path'),
-    wilkins = require('../lib/wilkins');
+    wilkins = require('../src/wilkins');
 
 var filename = path.join(__dirname, 'created-logfile.log');
 

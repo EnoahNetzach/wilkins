@@ -1,4 +1,4 @@
-var wilkins = require('../lib/wilkins');
+var wilkins = require('../src/wilkins');
 
 var logger = module.exports = new (wilkins.Logger)({
   transports: [

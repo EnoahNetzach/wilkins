@@ -8,8 +8,8 @@
 
 var assert = require('assert'),
     vows = require('vows'),
-    wilkins = require('../lib/wilkins'),
-    Memory = require('../lib/transports/memory').Memory;
+    wilkins = require('../src/wilkins'),
+    Memory = require('../src/transports/memory').Memory;
 
 /* Custom logging function */
 function myPrettyPrint(obj) {

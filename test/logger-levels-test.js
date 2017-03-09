@@ -8,10 +8,10 @@
 
 var assert = require('assert'),
     vows = require('vows'),
-    wilkins = require('../lib/wilkins'),
+    wilkins = require('../src/wilkins'),
     util = require('util'),
     helpers = require('./helpers'),
-    Console = require('../lib/transports/console').Console;
+    Console = require('../src/transports/console').Console;
 
 vows.describe('wilkins/logger/levels').addBatch({
   "The wilkins logger": {

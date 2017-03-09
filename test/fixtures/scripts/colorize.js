@@ -6,8 +6,8 @@
  *
  */
 
-var wilkins = require('../../../lib/wilkins'),
-    Console = require('../../../lib/transports/console').Console;
+var wilkins = require('../../../src/wilkins'),
+    Console = require('../../../src/transports/console').Console;
 
 var logger = new (wilkins.Logger)({
     transports: [
