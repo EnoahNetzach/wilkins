@@ -16,7 +16,7 @@ module.exports = function clone(obj) {
   //
   // We only need to clone reference types (Object)
   //
-  var copy = {}
+  let copy = {}
 
   if (obj instanceof Error) {
     // With potential custom Error objects, this might not be exactly correct,
@@ -33,7 +33,7 @@ module.exports = function clone(obj) {
     return new Date(obj.getTime())
   }
 
-  for (var i in obj) {
+  for (let i in obj) {
     if (Array.isArray(obj[i])) {
       copy[i] = obj[i].slice(0)
     } else if (obj[i] instanceof Buffer) {

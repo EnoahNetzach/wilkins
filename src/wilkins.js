@@ -8,7 +8,7 @@
 
 import setLevels from './common/setLevels'
 
-var wilkins = exports
+const wilkins = exports
 
 //
 // use require method for webpack bundle
@@ -43,11 +43,11 @@ wilkins.Transport = require('./transports/transport').Transport
 //
 // ### some-file1.js
 //
-//     var logger = require('wilkins').loggers.get('something')
+//     const logger = require('wilkins').loggers.get('something')
 //
 // ### some-file2.js
 //
-//     var logger = require('wilkins').loggers.get('something')
+//     const logger = require('wilkins').loggers.get('something')
 //
 wilkins.loggers = new wilkins.Container()
 
@@ -55,7 +55,7 @@ wilkins.loggers = new wilkins.Container()
 // We create and expose a 'defaultLogger' so that the programmer may do the
 // following without the need to create an instance of wilkins.Logger directly:
 //
-//     var wilkins = require('wilkins')
+//     const wilkins = require('wilkins')
 //     wilkins.log('info', 'some message')
 //     wilkins.error('some error')
 //

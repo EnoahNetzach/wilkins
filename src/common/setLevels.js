@@ -19,7 +19,7 @@ import longestElement from './longestElement'
 // for each of those levels.
 //
 module.exports = function (target, past, current, isDefault) {
-  var self = this
+  const self = this
   if (past) {
     Object.keys(past).forEach((level) => {
       delete target[level]
@@ -44,7 +44,7 @@ module.exports = function (target, past, current, isDefault) {
 
     target[level] = function (msg) {
       // build argument list (level, msg, ... [string interpolate], [{metadata}], [callback])
-      var args = [level].concat(Array.prototype.slice.call(arguments))
+      const args = [level].concat(Array.prototype.slice.call(arguments))
       target.log(...args)
     }
   })

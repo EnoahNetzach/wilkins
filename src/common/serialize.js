@@ -38,15 +38,15 @@ module.exports = function serialize(obj, key) {
     return key ? `${key}=${obj.toString('base64')}` : obj.toString('base64')
   }
 
-  var msg = '',
-    keys = Object.keys(obj),
-    length = keys.length
+  let msg = ''
+  const keys = Object.keys(obj)
+  const length = keys.length
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     if (Array.isArray(obj[keys[i]])) {
       msg += `${keys[i]}=[`
 
-      for (var j = 0, l = obj[keys[i]].length; j < l; j++) {
+      for (let j = 0, l = obj[keys[i]].length; j < l; j++) {
         msg += serialize(obj[keys[i]][j])
         if (j < l - 1) {
           msg += ', '

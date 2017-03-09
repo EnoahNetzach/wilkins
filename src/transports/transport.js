@@ -15,10 +15,9 @@ import util from 'util'
 // Constructor function for the Tranport object responsible
 // base functionality for all wilkins transports.
 //
-var Transport = exports.Transport = function (options) {
+const Transport = exports.Transport = function (options = {}) {
   events.EventEmitter.call(this)
 
-  options = options || {}
   this.silent = options.silent || false
   this.raw = options.raw || false
   this.name = options.name || this.name
@@ -56,13 +55,12 @@ Transport.prototype.formatQuery = function (query) {
 // #### @options {string|Object} Query to normalize
 // Normalize options for query
 //
-Transport.prototype.normalizeQuery = function (options) {
+Transport.prototype.normalizeQuery = function (opts = {}) {
   //
   // Use options similar to loggly.
   // [See Loggly Search API](http://wiki.loggly.com/retrieve_events#optional)
   //
-
-  options = options || {}
+  const options = opts
 
   // limit
   options.rows = options.rows || options.limit || 10
@@ -98,7 +96,7 @@ Transport.prototype.normalizeQuery = function (options) {
 // Formats the specified `results` with the given `options` accordinging
 // to the implementation of this transport.
 //
-Transport.prototype.formatResults = function (results, options) {
+Transport.prototype.formatResults = function (results) {
   return results
 }
 
@@ -112,23 +110,22 @@ Transport.prototype.formatResults = function (results, options) {
 // all logging has completed.
 //
 Transport.prototype.logException = function (msg, meta, callback) {
-  var self = this,
-    called
+  let called = false
 
   if (this.silent) {
     return callback()
   }
 
-  function onComplete() {
+  const onComplete = () => {
     if (!called) {
       called = true
-      self.removeListener('logged', onComplete)
-      self.removeListener('error', onComplete)
+      this.removeListener('logged', onComplete)
+      this.removeListener('error', onComplete)
       callback()
     }
   }
 
   this.once('logged', onComplete)
   this.once('error', onComplete)
-  this.log(self.exceptionsLevel, msg, meta, () => {})
+  this.log(this.exceptionsLevel, msg, meta, () => {})
 }

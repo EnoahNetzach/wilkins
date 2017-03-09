@@ -11,7 +11,7 @@ import { Transport } from './transport'
 // Constructor function for the Http transport object responsible
 // for persisting log messages and metadata to a terminal or TTY.
 //
-var Http = exports.Http = function (options) {
+const Http = exports.Http = function (options) {
   Transport.call(this, options)
   options = options || {}
 
@@ -41,18 +41,15 @@ Http.prototype.name = 'http'
 // Make a request to a wilkinsd server or any http server which can
 // handle json-rpc.
 //
-Http.prototype._request = function (options, callback) {
-  options = options || {}
-
-  var auth = options.auth || this.auth,
-    path = options.path || this.path || '',
-    req
+Http.prototype._request = function (options = {}, callback) {
+  const auth = options.auth || this.auth
+  const path = options.path || this.path || ''
 
   delete options.auth
   delete options.path
 
   // Prepare options for outgoing HTTP request
-  req = (this.ssl ? https : http).request({
+  const req = (this.ssl ? https : http).request({
     host: this.host,
     port: this.port,
     path: `/${path.replace(/^\//, '')}`,
@@ -64,7 +61,7 @@ Http.prototype._request = function (options, callback) {
 
   req.on('error', callback)
   req.on('response', (res) => {
-    var body = ''
+    let body = ''
 
     res.on('data', (chunk) => {
       body += chunk
@@ -89,14 +86,12 @@ Http.prototype._request = function (options, callback) {
 // Core logging method exposed to Wilkins. Metadata is optional.
 //
 Http.prototype.log = function (level, msg, meta, callback) {
-  var self = this
-
   if (typeof meta === 'function') {
     callback = meta
     meta = {}
   }
 
-  var options = {
+  const options = {
     method: 'collect',
     params: {
       level,
@@ -122,13 +117,17 @@ Http.prototype.log = function (level, msg, meta, callback) {
       err = new Error(`HTTP Status Code: ${res.statusCode}`)
     }
 
-    if (err) return callback(err)
+    if (err) {
+      return callback(err)
+    }
 
     // TODO: emit 'logged' correctly,
     // keep track of pending logs.
-    self.emit('logged')
+    this.emit('logged')
 
-    if (callback) callback(null, true)
+    if (callback) {
+      return callback(null, true)
+    }
   })
 }
 
@@ -138,14 +137,15 @@ Http.prototype.log = function (level, msg, meta, callback) {
 // #### @callback {function} Continuation to respond to when complete.
 // Query the transport. Options object is optional.
 //
-Http.prototype.query = function (options, callback) {
+Http.prototype.query = function (opts, callback) {
+  let options = opts
+
   if (typeof options === 'function') {
     callback = options
     options = {}
   }
 
-  var self = this,
-    options = this.normalizeQuery(options)
+  options = this.normalizeQuery(options)
 
   options = {
     method: 'query',
@@ -177,7 +177,7 @@ Http.prototype.query = function (options, callback) {
       }
     }
 
-    callback(null, body)
+    return callback(null, body)
   })
 }
 
@@ -186,17 +186,10 @@ Http.prototype.query = function (options, callback) {
 // #### @options {Object} Stream options for this instance.
 // Returns a log stream for this transport. Options object is optional.
 //
-Http.prototype.stream = function (options) {
-  options = options || {}
+Http.prototype.stream = function (opts) {
+  let options = opts || {}
 
-  var self = this,
-    stream = new Stream(),
-    req,
-    buff
-
-  stream.destroy = function () {
-    req.destroy()
-  }
+  const stream = new Stream()
 
   options = {
     method: 'stream',
@@ -213,23 +206,24 @@ Http.prototype.stream = function (options) {
     delete options.params.auth
   }
 
-  req = this._request(options)
-  buff = ''
+  const req = this._request(options)
+  let buff = ''
 
-  req.on('data', (data) => {
-    var data = (buff + data).split(/\n+/),
-      l = data.length - 1,
-      i = 0
+  stream.destroy = req.destroy
 
-    for (; i < l; i++) {
+  req.on('data', (newData) => {
+    const data = (buff + newData).split(/\n+/)
+    const lastIndex = data.length - 1
+
+    data.forEach((bit) => {
       try {
-        stream.emit('log', JSON.parse(data[i]))
+        stream.emit('log', JSON.parse(bit))
       } catch (e) {
         stream.emit('error', e)
       }
-    }
+    })
 
-    buff = data[l]
+    buff = data[lastIndex]
   })
 
   req.on('error', (err) => {

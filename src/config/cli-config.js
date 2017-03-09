@@ -6,7 +6,7 @@
  *
  */
 
-var cliConfig = exports
+const cliConfig = exports
 
 cliConfig.levels = {
   error: 0,

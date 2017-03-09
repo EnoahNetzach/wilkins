@@ -6,7 +6,7 @@
  *
  */
 
-var npmConfig = exports
+const npmConfig = exports
 
 npmConfig.levels = {
   error: 0,

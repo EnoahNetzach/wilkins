@@ -28,14 +28,15 @@ import serialize from './serialize'
 //      label:     'label to prepend the message'
 //    }
 //
-module.exports = function (options) {
-  var timestampFn = typeof options.timestamp === 'function' ? options.timestamp : require('./timestamp'),
-    timestamp = options.timestamp ? timestampFn() : null,
-    showLevel = options.showLevel === undefined ? true : options.showLevel,
-    meta = options.meta !== null && options.meta !== undefined && !(options.meta instanceof Error)
-      ? clone(cycle.decycle(options.meta))
-      : options.meta || null,
-    output
+module.exports = function (opts) {
+  let options = opts
+  const timestampFn = typeof options.timestamp === 'function' ? options.timestamp : require('./timestamp')
+  const timestamp = options.timestamp ? timestampFn() : null
+  const showLevel = options.showLevel === undefined ? true : options.showLevel
+  let meta = options.meta !== null && options.meta !== undefined && !(options.meta instanceof Error)
+    ? clone(cycle.decycle(options.meta))
+    : options.meta || null
+  let output
 
   //
   // raw mode is intended for outputing wilkins as streaming JSON to STDOUT
@@ -81,7 +82,7 @@ module.exports = function (options) {
 
     if (options.logstash === true) {
       // use logstash format
-      var logstashOutput = {}
+      const logstashOutput = {}
       if (output.message !== undefined) {
         logstashOutput['@message'] = output.message
         delete output.message
@@ -136,20 +137,20 @@ module.exports = function (options) {
       if (typeof options.prettyPrint === 'function') {
         output += ` ${options.prettyPrint(meta)}`
       } else if (options.prettyPrint) {
-        output += `${' ' + '\n'}${util.inspect(meta, false, options.depth || null, options.colorize)}`
+        output += ` \n${util.inspect(meta, false, options.depth || null, options.colorize)}`
       } else if (
         options.humanReadableUnhandledException &&
         Object.keys(meta).length === 5 &&
-        meta.hasOwnProperty('date') &&
-        meta.hasOwnProperty('process') &&
-        meta.hasOwnProperty('os') &&
-        meta.hasOwnProperty('trace') &&
-        meta.hasOwnProperty('stack')
+        meta.date &&
+        meta.process &&
+        meta.os &&
+        meta.trace &&
+        meta.stack
       ) {
         //
         // If meta carries unhandled exception data serialize the stack nicely
         //
-        var stack = meta.stack
+        const stack = meta.stack
         delete meta.stack
         delete meta.trace
         output += ` ${serialize(meta)}`

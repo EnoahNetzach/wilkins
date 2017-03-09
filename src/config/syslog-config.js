@@ -6,7 +6,7 @@
  *
  */
 
-var syslogConfig = exports
+const syslogConfig = exports
 
 syslogConfig.levels = {
   emerg: 0,

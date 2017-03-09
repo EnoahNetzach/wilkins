@@ -13,14 +13,42 @@ import log from '../common/log'
 import { Transport } from './transport'
 
 //
+// Convert stderrLevels into an Object for faster key-lookup times than an Array.
+//
+// For backwards compatibility, stderrLevels defaults to ['error', 'debug']
+// or ['error'] depending on whether options.debugStdout is true.
+//
+const setStderrLevels = (levels, debugStdout) => {
+  const defaultMsg = 'Cannot have non-string elements in stderrLevels Array'
+  if (debugStdout) {
+    if (levels) {
+      //
+      // Don't allow setting both debugStdout and stderrLevels together,
+      // since this could cause behaviour a programmer might not expect.
+      //
+      throw new Error('Cannot set debugStdout and stderrLevels together')
+    }
+
+    return stringArrayToSet(['error'], defaultMsg)
+  }
+
+  if (!levels) {
+    return stringArrayToSet(['error', 'debug'], defaultMsg)
+  } else if (!Array.isArray(levels)) {
+    throw new Error('Cannot set stderrLevels to type other than Array')
+  }
+
+  return stringArrayToSet(levels, defaultMsg)
+}
+
+//
 // ### function Console (options)
 // #### @options {Object} Options for this instance.
 // Constructor function for the Console transport object responsible
 // for persisting log messages and metadata to a terminal or TTY.
 //
-var Console = exports.Console = function (options) {
+const Console = exports.Console = function (options = {}) {
   Transport.call(this, options)
-  options = options || {}
 
   this.json = options.json || false
   this.colorize = options.colorize || false
@@ -35,39 +63,7 @@ var Console = exports.Console = function (options) {
   this.eol = options.eol || os.EOL
 
   if (this.json) {
-    this.stringify = options.stringify ||
-      function (obj) {
-        return JSON.stringify(obj, null, 2)
-      }
-  }
-
-  //
-  // Convert stderrLevels into an Object for faster key-lookup times than an Array.
-  //
-  // For backwards compatibility, stderrLevels defaults to ['error', 'debug']
-  // or ['error'] depending on whether options.debugStdout is true.
-  //
-  function setStderrLevels(levels, debugStdout) {
-    var defaultMsg = 'Cannot have non-string elements in stderrLevels Array'
-    if (debugStdout) {
-      if (levels) {
-        //
-        // Don't allow setting both debugStdout and stderrLevels together,
-        // since this could cause behaviour a programmer might not expect.
-        //
-        throw new Error('Cannot set debugStdout and stderrLevels together')
-      }
-
-      return stringArrayToSet(['error'], defaultMsg)
-    }
-
-    if (!levels) {
-      return stringArrayToSet(['error', 'debug'], defaultMsg)
-    } else if (!Array.isArray(levels)) {
-      throw new Error('Cannot set stderrLevels to type other than Array')
-    }
-
-    return stringArrayToSet(levels, defaultMsg)
+    this.stringify = options.stringify || (obj => JSON.stringify(obj, null, 2))
   }
 }
 
@@ -94,10 +90,7 @@ Console.prototype.log = function (level, msg, meta, callback) {
     return callback(null, true)
   }
 
-  var self = this,
-    output
-
-  output = log({
+  const output = log({
     colorize: this.colorize,
     json: this.json,
     level,
@@ -120,18 +113,19 @@ Console.prototype.log = function (level, msg, meta, callback) {
     if (process && typeof process.stderr !== 'undefined') {
       process.stderr.write(output + this.eol)
     } else {
-      console.error(output)
+      console.error(output) // eslint-disable-line no-console
     }
   } else if (process && typeof process.stdout !== 'undefined') {
     process.stdout.write(output + this.eol)
   } else {
-    console.log(output)
+    console.log(output) // eslint-disable-line no-console
   }
 
   //
   // Emit the `logged` event immediately because the event loop
   // will not exit until `process.stdout` has drained anyway.
   //
-  self.emit('logged')
-  callback(null, true)
+  this.emit('logged')
+
+  return callback(null, true)
 }

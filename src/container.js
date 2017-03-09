@@ -17,7 +17,7 @@ import { Console } from './transports/console'
 // Constructor function for the Container object responsible for managing
 // a set of `wilkins.Logger` instances based on string ids.
 //
-var Container = exports.Container = function (options) {
+const Container = exports.Container = function (options) {
   this.loggers = {}
   this.options = options || {}
   this.default = {
@@ -37,9 +37,9 @@ var Container = exports.Container = function (options) {
 // Retreives a `wilkins.Logger` instance for the specified `id`. If
 // an instance does not exist, one is created.
 //
-Container.prototype.get = Container.prototype.add = function (id, options) {
-  var self = this,
-    existing
+Container.prototype.get = Container.prototype.add = function (id, opts) {
+  let existing
+  let options = opts
 
   if (!this.loggers[id]) {
     //
@@ -63,13 +63,13 @@ Container.prototype.get = Container.prototype.add = function (id, options) {
         return
       }
 
-      var name = capitalize(key)
+      const name = capitalize(key)
 
       if (!wilkins.transports[name]) {
         throw new Error(`Cannot add unknown transport: ${name}`)
       }
 
-      var namedOptions = options[key]
+      const namedOptions = options[key]
       namedOptions.id = id
       options.transports.push(new wilkins.transports[name](namedOptions))
     })
@@ -78,7 +78,7 @@ Container.prototype.get = Container.prototype.add = function (id, options) {
     this.loggers[id] = new wilkins.Logger(options)
 
     this.loggers[id].on('close', () => {
-      self._delete(id)
+      this._delete(id)
     })
   }
 
@@ -102,7 +102,7 @@ Container.prototype.has = function (id) {
 // If no `id` is supplied then all Loggers are closed.
 //
 Container.prototype.close = function (id) {
-  var self = this
+  const self = this
 
   function _close(id) {
     if (!self.loggers[id]) {

@@ -8,9 +8,9 @@ import { Transport } from './transport'
 // Constructor function for the Memory transport object responsible
 // for persisting log messages and metadata to a memory array of messages.
 //
-var Memory = exports.Memory = function (options) {
-  Transport.call(this, options)
-  options = options || {}
+const Memory = exports.Memory = function (opts) {
+  Transport.call(this, opts)
+  const options = opts || {}
 
   this.errorOutput = []
   this.writeOutput = []
@@ -54,10 +54,7 @@ Memory.prototype.log = function (level, msg, meta, callback) {
     return callback(null, true)
   }
 
-  var self = this,
-    output
-
-  output = log({
+  const output = log({
     colorize: this.colorize,
     json: this.json,
     level,
@@ -79,8 +76,9 @@ Memory.prototype.log = function (level, msg, meta, callback) {
     this.writeOutput.push(output)
   }
 
-  self.emit('logged')
-  callback(null, true)
+  this.emit('logged')
+
+  return callback(null, true)
 }
 
 Memory.prototype.clearLogs = function () {

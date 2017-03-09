@@ -9,7 +9,7 @@
 import os from 'os'
 import stackTrace from 'stack-trace'
 
-var exception = exports
+const exception = exports
 
 exception.getAllInfo = function (err) {
   return {
@@ -42,7 +42,7 @@ exception.getOsInfo = function () {
 }
 
 exception.getTrace = function (err) {
-  var trace = err ? stackTrace.parse(err) : stackTrace.get()
+  const trace = err ? stackTrace.parse(err) : stackTrace.get()
   return trace.map(site => ({
     column: site.getColumnNumber(),
     file: site.getFileName(),

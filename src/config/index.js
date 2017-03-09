@@ -7,12 +7,25 @@
  */
 
 import chalk from 'chalk'
+import cliConfig from '../config/cli-config'
+import npmConfig from '../config/npm-config'
+import syslogConfig from '../config/syslog-config'
 
 // Fix colors not appearing in non-tty environments
 chalk.enabled = true
 
-var config = exports,
-  allColors = exports.allColors = {}
+const config = exports
+const allColors = exports.allColors = {}
+
+function mixin(target, ...args) {
+  args.forEach((arg) => {
+    const keys = Object.keys(arg)
+    for (let i = 0; i < keys.length; i++) {
+      target[keys[i]] = arg[keys[i]]
+    }
+  })
+  return target
+}
 
 config.addColors = function (colors) {
   mixin(allColors, colors)
@@ -21,14 +34,14 @@ config.addColors = function (colors) {
 config.colorize = function (level, message) {
   if (typeof message === 'undefined') message = level
 
-  var colorized = message
+  let colorized = message
   if (allColors[level] instanceof Array) {
-    for (var i = 0, l = allColors[level].length; i < l; ++i) {
+    for (let i = 0, l = allColors[level].length; i < l; ++i) {
       colorized = chalk[allColors[level][i]](colorized)
     }
   } else if (allColors[level].match(/\s/)) {
-    var colorArr = allColors[level].split(/\s+/)
-    for (var i = 0; i < colorArr.length; ++i) {
+    const colorArr = allColors[level].split(/\s+/)
+    for (let i = 0; i < colorArr.length; ++i) {
       colorized = chalk[colorArr[i]](colorized)
     }
     allColors[level] = colorArr
@@ -42,9 +55,9 @@ config.colorize = function (level, message) {
 //
 // Export config sets
 //
-config.cli = require('../config/cli-config')
-config.npm = require('../config/npm-config')
-config.syslog = require('../config/syslog-config')
+config.cli = cliConfig
+config.npm = npmConfig
+config.syslog = syslogConfig
 
 //
 // Add colors for pre-defined config sets
@@ -52,15 +65,3 @@ config.syslog = require('../config/syslog-config')
 config.addColors(config.cli.colors)
 config.addColors(config.npm.colors)
 config.addColors(config.syslog.colors)
-
-function mixin(target) {
-  var args = Array.prototype.slice.call(arguments, 1)
-
-  args.forEach((a) => {
-    var keys = Object.keys(a)
-    for (var i = 0; i < keys.length; i++) {
-      target[keys[i]] = a[keys[i]]
-    }
-  })
-  return target
-}

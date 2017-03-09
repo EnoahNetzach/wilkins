@@ -24,16 +24,15 @@ import { Transport } from './transport'
 // Constructor function for the File transport object responsible
 // for persisting log messages and metadata to one or more files.
 //
-var File = exports.File = function (options) {
-  var self = this
+const File = exports.File = function (options) {
   Transport.call(this, options)
 
   //
   // Helper function which throws an `Error` in the event
   // that any of the rest of the arguments is present in `options`.
   //
-  function throwIf(target /* , illegal... */) {
-    Array.prototype.slice.call(arguments, 1).forEach((name) => {
+  const throwIf = (target, ...args) => {
+    args.forEach((name) => {
       if (options[name]) {
         throw new Error(`Cannot set ${name} and ${target}together`)
       }
@@ -56,7 +55,7 @@ var File = exports.File = function (options) {
     this._stream = options.stream
     this._isStreams2 = isWritable(this._stream)
     this._stream.on('error', (error) => {
-      self.emit('error', error)
+      this.emit('error', error)
     })
     //
     // We need to listen for drain events when
@@ -134,15 +133,9 @@ File.prototype.log = function (level, msg, meta, callback) {
     return callback(new Error('Transport is in a failed state.'))
   }
 
-  var self = this
-
-  if (typeof msg !== 'string') {
-    msg = `${msg}`
-  }
-
-  var output = log({
+  let output = log({
     level,
-    message: msg,
+    message: String(msg),
     meta,
     json: this.json,
     logstash: this.logstash,
@@ -176,12 +169,12 @@ File.prototype.log = function (level, msg, meta, callback) {
         //
         // If there was an error enqueue the message
         //
-        return self._buffer.push([output, callback])
+        return this._buffer.push([output, callback])
       }
 
-      self._write(output, callback)
-      self._size += output.length
-      self._lazyDrain()
+      this._write(output, callback)
+      this._size += output.length
+      this._lazyDrain()
     })
   }
 }
@@ -195,25 +188,20 @@ File.prototype.log = function (level, msg, meta, callback) {
 File.prototype._write = function (data, callback) {
   if (this._isStreams2) {
     this._stream.write(data)
-    return callback &&
-      process.nextTick(() => {
-        callback(null, true)
-      })
+    return callback && process.nextTick(() => callback(null, true))
   }
 
   // If this is a file write stream, we could use the builtin
   // callback functionality, however, the stream is not guaranteed
   // to be an fs.WriteStream.
-  var ret = this._stream.write(data)
+  const ret = this._stream.write(data)
   if (!callback) return
   if (ret === false) {
     return this._stream.once('drain', () => {
       callback(null, true)
     })
   }
-  process.nextTick(() => {
-    callback(null, true)
-  })
+  return process.nextTick(() => callback(null, true))
 }
 
 //
@@ -222,21 +210,73 @@ File.prototype._write = function (data, callback) {
 // #### @callback {function} Continuation to respond to when complete.
 // Query the transport. Options object is optional.
 //
-File.prototype.query = function (options, callback) {
+File.prototype.query = function (opts, callback) {
+  let options = opts || {}
+
   if (typeof options === 'function') {
     callback = options
     options = {}
   }
 
-  var file = path.join(this.dirname, this.filename),
-    options = this.normalizeQuery(options),
-    buff = '',
-    results = [],
-    row = 0
+  const file = path.join(this.dirname, this.filename)
+  options = this.normalizeQuery(options)
+  let buff = ''
+  let results = []
+  let row = 0
 
-  var stream = fs.createReadStream(file, {
+  const stream = fs.createReadStream(file, {
     encoding: 'utf8',
   })
+
+  const push = (data) => {
+    if (options.rows && results.length >= options.rows && options.order != 'desc') {
+      if (stream.readable) {
+        stream.destroy()
+      }
+      return
+    }
+
+    if (options.fields) {
+      const obj = {}
+      options.fields.forEach((key) => {
+        obj[key] = data[key]
+      })
+      data = obj
+    }
+
+    if (options.order === 'desc') {
+      if (results.length >= options.rows) {
+        results.shift()
+      }
+    }
+    results.push(data)
+  }
+
+  const check = (data) => {
+    if (!data) {
+      return undefined
+    }
+
+    if (typeof data !== 'object') return
+
+    const time = new Date(data.timestamp)
+    if ((options.from && time < options.from) || (options.until && time > options.until)) {
+      return undefined
+    }
+
+    return true
+  }
+
+  const add = (buffer, attempt) => {
+    try {
+      const data = JSON.parse(buffer)
+      if (check(data)) push(data)
+    } catch (e) {
+      if (!attempt) {
+        stream.emit('error', e)
+      }
+    }
+  }
 
   stream.on('error', (err) => {
     if (stream.readable) {
@@ -246,19 +286,18 @@ File.prototype.query = function (options, callback) {
     return err.code !== 'ENOENT' ? callback(err) : callback(null, results)
   })
 
-  stream.on('data', (data) => {
-    var data = (buff + data).split(/\n+/),
-      l = data.length - 1,
-      i = 0
+  stream.on('data', (newData) => {
+    const data = (buff + newData).split(/\n+/)
+    const lastIndex = data.length - 1
 
-    for (; i < l; i++) {
+    data.forEach((bit) => {
       if (!options.start || row >= options.start) {
-        add(data[i])
+        add(bit)
       }
-      row++
-    }
+      row += 1
+    })
 
-    buff = data[l]
+    buff = data[lastIndex]
   })
 
   stream.on('close', () => {
@@ -268,54 +307,6 @@ File.prototype.query = function (options, callback) {
     }
     if (callback) callback(null, results)
   })
-
-  function add(buff, attempt) {
-    try {
-      var log = JSON.parse(buff)
-      if (check(log)) push(log)
-    } catch (e) {
-      if (!attempt) {
-        stream.emit('error', e)
-      }
-    }
-  }
-
-  function push(log) {
-    if (options.rows && results.length >= options.rows && options.order != 'desc') {
-      if (stream.readable) {
-        stream.destroy()
-      }
-      return
-    }
-
-    if (options.fields) {
-      var obj = {}
-      options.fields.forEach((key) => {
-        obj[key] = log[key]
-      })
-      log = obj
-    }
-
-    if (options.order === 'desc') {
-      if (results.length >= options.rows) {
-        results.shift()
-      }
-    }
-    results.push(log)
-  }
-
-  function check(log) {
-    if (!log) return
-
-    if (typeof log !== 'object') return
-
-    var time = new Date(log.timestamp)
-    if ((options.from && time < options.from) || (options.until && time > options.until)) {
-      return
-    }
-
-    return true
-  }
 }
 
 //
@@ -323,12 +314,12 @@ File.prototype.query = function (options, callback) {
 // #### @options {Object} Stream options for this instance.
 // Returns a log stream for this transport. Options object is optional.
 //
-File.prototype.stream = function (options) {
-  var file = path.join(this.dirname, this.filename),
-    options = options || {},
-    stream = new Stream()
+File.prototype.stream = function (opts) {
+  const file = path.join(this.dirname, this.filename)
+  const options = opts || {}
+  const stream = new Stream()
 
-  var tail = {
+  const tail = {
     file,
     start: options.start,
   }
@@ -387,15 +378,13 @@ File.prototype.open = function (callback) {
 // Closes the stream associated with this instance.
 //
 File.prototype.close = function () {
-  var self = this
-
   if (this._stream) {
     this._stream.end()
     this._stream.destroySoon()
 
     this._stream.once('finish', () => {
-      self.emit('flush')
-      self.emit('closed')
+      this.emit('flush')
+      this.emit('closed')
     })
   }
 }
@@ -406,13 +395,11 @@ File.prototype.close = function () {
 // used by this instance.
 //
 File.prototype.flush = function () {
-  var self = this
-
   // If nothing to flush, there will be no "flush" event from native stream
   // Thus, the "open" event will never be fired (see _createStream.createAndFlush function)
-  // That means, self.opening will never set to false and no logs will be written to disk
+  // That means, this.opening will never set to false and no logs will be written to disk
   if (!this._buffer.length) {
-    return self.emit('flush')
+    return this.emit('flush')
   }
 
   //
@@ -420,12 +407,12 @@ File.prototype.flush = function () {
   // and then write them to the newly created stream.
   //
   this._buffer.forEach((item) => {
-    var str = item[0],
+    const str = item[0],
       callback = item[1]
 
     process.nextTick(() => {
-      self._write(str, callback)
-      self._size += str.length
+      this._write(str, callback)
+      this._size += str.length
     })
   })
 
@@ -433,15 +420,15 @@ File.prototype.flush = function () {
   // Quickly truncate the `_buffer` once the write operations
   // have been started
   //
-  self._buffer.length = 0
+  this._buffer.length = 0
 
   //
   // When the stream has drained we have flushed
   // our buffer.
   //
-  self._stream.once('drain', () => {
-    self.emit('flush')
-    self.emit('logged')
+  this._stream.once('drain', () => {
+    this.emit('flush')
+    this.emit('logged')
   })
 }
 
@@ -451,32 +438,31 @@ File.prototype.flush = function () {
 // based on the common state (such as `maxsize` and `_basename`).
 //
 File.prototype._createStream = function () {
-  var self = this
   this.opening = true
 
-  function checkFile(target) {
-    var fullname = path.join(self.dirname, target)
+  const checkFile = (target) => {
+    const fullname = path.join(this.dirname, target)
 
     //
     // Creates the `WriteStream` and then flushes any
     // buffered messages.
     //
-    function createAndFlush(size) {
-      if (self._stream) {
-        self._stream.end()
-        self._stream.destroySoon()
+    const createAndFlush = (size) => {
+      if (this._stream) {
+        this._stream.end()
+        this._stream.destroySoon()
       }
 
-      self._size = size
-      self.filename = target
-      self._stream = fs.createWriteStream(fullname, self.options)
-      self._isStreams2 = isWritable(self._stream)
-      self._stream.on('error', (error) => {
-        if (self._failures < self.maxRetries) {
-          self._createStream()
-          self._failures++
+      this._size = size
+      this.filename = target
+      this._stream = fs.createWriteStream(fullname, this.options)
+      this._isStreams2 = isWritable(this._stream)
+      this._stream.on('error', (error) => {
+        if (this._failures < this.maxRetries) {
+          this._createStream()
+          this._failures++
         } else {
-          self.emit('error', error)
+          this.emit('error', error)
         }
       })
       //
@@ -484,21 +470,21 @@ File.prototype._createStream = function () {
       // write() returns false. This can make node
       // mad at times.
       //
-      self._stream.setMaxListeners(Infinity)
+      this._stream.setMaxListeners(Infinity)
 
       //
       // When the current stream has finished flushing
       // then we can be sure we have finished opening
       // and thus can emit the `open` event.
       //
-      self.once('flush', () => {
+      this.once('flush', () => {
         // Because "flush" event is based on native stream "drain" event,
-        // logs could be written inbetween "self.flush()" and here
+        // logs could be written inbetween "this.flush()" and here
         // Therefore, we need to flush again to make sure everything is flushed
-        self.flush()
+        this.flush()
 
-        self.opening = false
-        self.emit('open', fullname)
+        this.opening = false
+        this.emit('open', fullname)
       })
       //
       // Remark: It is possible that in the time it has taken to find the
@@ -506,39 +492,39 @@ File.prototype._createStream = function () {
       // but for sensible limits (10s - 100s of MB) this seems unlikely in less
       // than one second.
       //
-      self.flush()
+      this.flush()
       compressFile()
     }
 
-    function compressFile() {
-      if (self._archive) {
-        var gzip = zlib.createGzip()
+    const compressFile = () => {
+      if (this._archive) {
+        const gzip = zlib.createGzip()
 
-        var inp = fs.createReadStream(String(self._archive))
-        var out = fs.createWriteStream(`${self._archive}.gz`)
+        const inp = fs.createReadStream(String(this._archive))
+        const out = fs.createWriteStream(`${this._archive}.gz`)
 
         inp.pipe(gzip).pipe(out)
 
-        fs.unlink(String(self._archive))
-        self._archive = ''
+        fs.unlink(String(this._archive))
+        this._archive = ''
       }
     }
 
     fs.stat(fullname, (err, stats) => {
       if (err) {
         if (err.code !== 'ENOENT') {
-          return self.emit('error', err)
+          return this.emit('error', err)
         }
         return createAndFlush(0)
       }
 
-      if (!stats || (self.maxsize && stats.size >= self.maxsize)) {
+      if (!stats || (this.maxsize && stats.size >= this.maxsize)) {
         //
         // If `stats.size` is greater than the `maxsize` for
         // this instance then try again
         //
-        return self._incFile(() => {
-          checkFile(self._getFile())
+        return this._incFile(() => {
+          checkFile(this._getFile())
         })
       }
 
@@ -550,10 +536,8 @@ File.prototype._createStream = function () {
 }
 
 File.prototype._incFile = function (callback) {
-  var ext = path.extname(this._basename),
-    basename = path.basename(this._basename, ext),
-    oldest,
-    target
+  const ext = path.extname(this._basename)
+  const basename = path.basename(this._basename, ext)
 
   if (!this.tailable) {
     this._created += 1
@@ -569,8 +553,8 @@ File.prototype._incFile = function (callback) {
 // in the case that log filesizes are being capped.
 //
 File.prototype._getFile = function () {
-  var ext = path.extname(this._basename),
-    basename = path.basename(this._basename, ext)
+  const ext = path.extname(this._basename)
+  const basename = path.basename(this._basename, ext)
 
   //
   // Caveat emptor (indexzero): rotationFormat() was broken by design
@@ -588,21 +572,20 @@ File.prototype._getFile = function () {
 // checked by this instance.
 //
 File.prototype._checkMaxFilesIncrementing = function (ext, basename, callback) {
-  var oldest,
-    target,
-    self = this
-
-  if (self.zippedArchive) {
-    self._archive = path.join(self.dirname, basename + (self._created === 1 ? '' : self._created - 1) + ext)
+  if (this.zippedArchive) {
+    this._archive = path.join(this.dirname, basename + (this._created === 1 ? '' : this._created - 1) + ext)
   }
 
   // Check for maxFiles option and delete file
-  if (!self.maxFiles || self._created < self.maxFiles) {
+  if (!this.maxFiles || this._created < this.maxFiles) {
     return callback()
   }
 
-  oldest = self._created - self.maxFiles
-  target = path.join(self.dirname, basename + (oldest !== 0 ? oldest : '') + ext + (self.zippedArchive ? '.gz' : ''))
+  const oldest = this._created - this.maxFiles
+  const target = path.join(
+    this.dirname,
+    basename + (oldest !== 0 ? oldest : '') + ext + (this.zippedArchive ? '.gz' : ''),
+  )
   fs.unlink(target, callback)
 }
 
@@ -615,33 +598,32 @@ File.prototype._checkMaxFilesIncrementing = function (ext, basename, callback) {
 //    file is oversized again, roll file1.log to file2.log,
 //    roll file.log to file1.log, and so on.
 File.prototype._checkMaxFilesTailable = function (ext, basename, callback) {
-  var tasks = [],
-    self = this
+  const tasks = []
 
-  if (!this.maxFiles) return
+  if (!this.maxFiles) {
+    return
+  }
 
-  for (var x = this.maxFiles - 1; x > 0; x--) {
-    tasks.push(
-      (function (i) {
-        return function (cb) {
-          var tmppath = path.join(self.dirname, basename + (i - 1) + ext + (self.zippedArchive ? '.gz' : ''))
-          fs.exists(tmppath, (exists) => {
-            if (!exists) {
-              return cb(null)
-            }
-
-            fs.rename(tmppath, path.join(self.dirname, basename + i + ext + (self.zippedArchive ? '.gz' : '')), cb)
-          })
+  new Array(this.maxFiles)
+    .fill(null)
+    .map((_, i) => (cb) => {
+      const tmppath = path.join(this.dirname, basename + (i - 1) + ext + (this.zippedArchive ? '.gz' : ''))
+      fs.exists(tmppath, (exists) => {
+        if (!exists) {
+          return cb(null)
         }
-      }(x)),
-    )
-  }
 
-  if (self.zippedArchive) {
-    self._archive = path.join(self.dirname, basename + 1 + ext)
+        return fs.rename(tmppath, path.join(this.dirname, basename + i + ext + (this.zippedArchive ? '.gz' : '')), cb)
+      })
+    })
+    .reverse()
+    .forEach(task => tasks.push(task))
+
+  if (this.zippedArchive) {
+    this._archive = path.join(this.dirname, basename + 1 + ext)
   }
-  async.series(tasks, (err) => {
-    fs.rename(path.join(self.dirname, basename + ext), path.join(self.dirname, basename + 1 + ext), callback)
+  async.series(tasks, () => {
+    fs.rename(path.join(this.dirname, basename + ext), path.join(this.dirname, basename + 1 + ext), callback)
   })
 }
 
@@ -652,14 +634,12 @@ File.prototype._checkMaxFilesTailable = function (ext, basename, callback) {
 // Node.js is single-threaded.
 //
 File.prototype._lazyDrain = function () {
-  var self = this
-
   if (!this._draining && this._stream) {
     this._draining = true
 
-    this._stream.once('drain', function () {
+    this._stream.once('drain', () => {
       this._draining = false
-      self.emit('logged')
+      this.emit('logged')
     })
   }
 }

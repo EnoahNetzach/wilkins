@@ -15,7 +15,7 @@ import clone from './common/clone'
 import setLevels from './common/setLevels'
 import exception from './exception'
 
-var formatRegExp = /%[sdj%]/g
+const formatRegExp = /%[sdj%]/g
 
 //
 // ### function Logger (options)
@@ -23,7 +23,7 @@ var formatRegExp = /%[sdj%]/g
 // Constructor function for the Logger object responsible
 // for persisting log messages and metadata to one or more transports.
 //
-var Logger = exports.Logger = function (options) {
+const Logger = exports.Logger = function (options) {
   events.EventEmitter.call(this)
   this.configure(options)
 }
@@ -41,8 +41,6 @@ util.inherits(Logger, events.EventEmitter)
 //    exceptionHandlers, etc.
 //
 Logger.prototype.configure = function (options) {
-  var self = this
-
   //
   // If we have already been setup with transports
   // then remove them before proceeding.
@@ -57,7 +55,7 @@ Logger.prototype.configure = function (options) {
 
   if (options.transports) {
     options.transports.forEach((transport) => {
-      self.add(transport, null, true)
+      this.add(transport, null, true)
     })
   }
 
@@ -88,7 +86,7 @@ Logger.prototype.configure = function (options) {
 
   const kinds = ['rewriters', 'filters']
   kinds.forEach((kind) => {
-    self[kind] = Array.isArray(options[kind]) ? options[kind] : []
+    this[kind] = Array.isArray(options[kind]) ? options[kind] : []
   })
 
   if (options.exceptionHandlers) {
@@ -105,9 +103,8 @@ Logger.prototype.configure = function (options) {
 // Core logging method exposed to Wilkins. Metadata is optional.
 //
 Logger.prototype.log = function (level) {
-  var args = Array.prototype.slice.call(arguments, 1),
-    self = this,
-    transports
+  const args = Array.prototype.slice.call(arguments, 1)
+  let transports
 
   while (args[args.length - 1] === null) {
     args.pop()
@@ -119,22 +116,22 @@ Logger.prototype.log = function (level) {
   //
   //    logger.info('No interpolation symbols', 'ok', 'why', { meta: 'is-this' })
   //
-  var callback = typeof args[args.length - 1] === 'function' ? args.pop() : null
+  let callback = typeof args[args.length - 1] === 'function' ? args.pop() : null
 
   //
   // Handle errors appropriately.
   //
-  function onError(err) {
+  const onError = (err) => {
     if (callback) {
       callback(err)
-    } else if (self.emitErrs) {
-      self.emit('error', err)
+    } else if (this.emitErrs) {
+      this.emit('error', err)
     }
   }
 
   if (this._names.length === 0) {
     return onError(new Error('Cannot log with no transports.'))
-  } else if (typeof self.levels[level] === 'undefined') {
+  } else if (typeof this.levels[level] === 'undefined') {
     return onError(new Error(`Unknown log level: ${level}`))
   }
 
@@ -143,10 +140,10 @@ Logger.prototype.log = function (level) {
   // then be eager and return. This could potentially be calculated
   // during `setLevels` for more performance gains.
   //
-  var targets = this._names.filter((name) => {
-    var transport = self.transports[name]
-    return (transport.level && self.levels[transport.level] >= self.levels[level]) ||
-      (!transport.level && self.levels[self.level] >= self.levels[level])
+  const targets = this._names.filter((name) => {
+    const transport = this.transports[name]
+    return (transport.level && this.levels[transport.level] >= this.levels[level]) ||
+      (!transport.level && this.levels[this.level] >= this.levels[level])
   })
 
   if (!targets.length) {
@@ -162,16 +159,16 @@ Logger.prototype.log = function (level) {
   //
   //    logger.info('No interpolation symbols', 'ok', 'why', { meta: 'is-this' })
   //
-  var msg,
-    meta = {},
-    validMeta = false
-  var hasFormat = args && args[0] && args[0].match && args[0].match(formatRegExp) !== null
-  var tokens = hasFormat ? args[0].match(formatRegExp) : []
-  var ptokens = tokens.filter(t => t === '%%')
+  let msg
+  let meta = {}
+  let validMeta = false
+  const hasFormat = args && args[0] && args[0].match && args[0].match(formatRegExp) !== null
+  const tokens = hasFormat ? args[0].match(formatRegExp) : []
+  const ptokens = tokens.filter(t => t === '%%')
   if (args.length - 1 - (tokens.length - ptokens.length) > 0 || args.length === 1) {
     // last arg is meta
     meta = args[args.length - 1] || args
-    var metaType = Object.prototype.toString.call(meta)
+    const metaType = Object.prototype.toString.call(meta)
     validMeta = metaType === '[object Object]' || metaType === '[object Error]' || metaType === '[object Array]'
     meta = validMeta ? args.pop() : {}
   }
@@ -180,7 +177,7 @@ Logger.prototype.log = function (level) {
   //
   // Respond to the callback.
   //
-  function finish(err) {
+  const finish = (err) => {
     if (callback) {
       if (err) return callback(err)
       callback(null, level, msg, meta)
@@ -188,7 +185,7 @@ Logger.prototype.log = function (level) {
 
     callback = null
     if (!err) {
-      self.emit('logged', level, msg, meta)
+      this.emit('logged', level, msg, meta)
     }
   }
 
@@ -198,11 +195,11 @@ Logger.prototype.log = function (level) {
   }
 
   this.rewriters.forEach((rewriter) => {
-    meta = rewriter(level, msg, meta, self)
+    meta = rewriter(level, msg, meta, this)
   })
 
   this.filters.forEach((filter) => {
-    var filtered = filter(level, msg, meta, self)
+    const filtered = filter(level, msg, meta, this)
     if (typeof filtered === 'string') {
       msg = filtered
     } else {
@@ -219,15 +216,15 @@ Logger.prototype.log = function (level) {
   // see: http://en.wikipedia.org/wiki/ANSI_escape_code
   //
   if (this.stripColors) {
-    var code = /\u001b\[(\d+(;\d+)*)?m/g
+    const code = /\u001b\[(\d+(;\d+)*)?m/g
     msg = `${msg}`.replace(code, '')
   }
 
   //
   // Log for each transport and emit 'logging' event
   //
-  function transportLog(name, next) {
-    var transport = self.transports[name]
+  const transportLog = (name, next) => {
+    const transport = this.transports[name]
     transport.log(level, msg, meta, (err) => {
       if (err) {
         err.transport = transport
@@ -235,7 +232,7 @@ Logger.prototype.log = function (level) {
         return next()
       }
 
-      self.emit('logging', transport, level, msg, meta)
+      this.emit('logging', transport, level, msg, meta)
       next()
     })
   }
@@ -252,32 +249,33 @@ Logger.prototype.log = function (level) {
 // This will aggregate each transport's results into one object containing
 // a property per transport.
 //
-Logger.prototype.query = function (options, callback) {
+Logger.prototype.query = function (opts, cb) {
+  let options = opts || {}
+  let callback = cb
+
   if (typeof options === 'function') {
     callback = options
     options = {}
   }
 
-  var self = this,
-    options = options || {},
-    results = {},
-    query = clone(options.query) || {},
-    transports
+  const results = {}
+  const query = clone(options.query) || {}
+  let transports
 
   //
   // Helper function to query a single transport
   //
-  function queryTransport(transport, next) {
+  const queryTransport = (transport, next) => {
     if (options.query) {
       options.query = transport.formatQuery(query)
     }
 
-    transport.query(options, (err, results) => {
+    transport.query(options, (err, result) => {
       if (err) {
         return next(err)
       }
 
-      next(null, transport.formatResults(results, options.format))
+      return next(null, transport.formatResults(result, options.format))
     })
   }
 
@@ -285,16 +283,16 @@ Logger.prototype.query = function (options, callback) {
   // Helper function to accumulate the results from
   // `queryTransport` into the `results`.
   //
-  function addResults(transport, next) {
+  const addResults = (transport, next) => {
     queryTransport(transport, (err, result) => {
       //
       // queryTransport could potentially invoke the callback
       // multiple times since Transport code can be unpredictable.
       //
       if (next) {
-        result = err || result
-        if (result) {
-          results[transport.name] = result
+        const res = err || result
+        if (res) {
+          results[transport.name] = res
         }
 
         next()
@@ -316,7 +314,7 @@ Logger.prototype.query = function (options, callback) {
   //
   // Create a list of all transports for this instance.
   //
-  transports = this._names.map(name => self.transports[name]).filter(transport => !!transport.query)
+  transports = this._names.map(name => this.transports[name]).filter(transport => !!transport.query)
 
   //
   // Iterate over the transports in parallel setting the
@@ -332,15 +330,13 @@ Logger.prototype.query = function (options, callback) {
 // #### @options {Object} Stream options for this instance.
 // Returns a log stream for all transports. Options object is optional.
 //
-Logger.prototype.stream = function (options) {
-  var self = this,
-    options = options || {},
-    out = new Stream(),
-    streams = [],
-    transports
+Logger.prototype.stream = function (opts) {
+  let options = opts || {}
+  let out = new Stream()
+  const streams = []
 
   if (options.transport) {
-    var transport = this.transports[options.transport]
+    const transport = this.transports[options.transport]
     delete options.transport
     if (transport && transport.stream) {
       return transport.stream(options)
@@ -349,19 +345,16 @@ Logger.prototype.stream = function (options) {
 
   out._streams = streams
   out.destroy = function () {
-    var i = streams.length
-    while (i--) {
-      streams[i].destroy()
-    }
+    streams.reverse().forEach(stream => stream.destroy())
   }
 
   //
   // Create a list of all transports for this instance.
   //
-  transports = this._names.map(name => self.transports[name]).filter(transport => !!transport.stream)
+  const transports = this._names.map(name => this.transports[name]).filter(transport => !!transport.stream)
 
   transports.forEach((transport) => {
-    var stream = transport.stream(options)
+    const stream = transport.stream(options)
     if (!stream) return
 
     streams.push(stream)
@@ -388,10 +381,8 @@ Logger.prototype.stream = function (options) {
 // transports associated with this instance (if necessary).
 //
 Logger.prototype.close = function () {
-  var self = this
-
   this._names.forEach((name) => {
-    var transport = self.transports[name]
+    const transport = this.transports[name]
     if (transport && transport.close) {
       transport.close()
     }
@@ -406,9 +397,8 @@ Logger.prototype.close = function () {
 // ADDING any handlers passed in.
 //
 Logger.prototype.handleExceptions = function () {
-  var args = Array.prototype.slice.call(arguments),
-    handlers = [],
-    self = this
+  const args = Array.prototype.slice.call(arguments)
+  let handlers = []
 
   args.forEach((a) => {
     if (Array.isArray(a)) {
@@ -420,10 +410,10 @@ Logger.prototype.handleExceptions = function () {
 
   this.exceptionHandlers = this.exceptionHandlers || {}
   handlers.forEach((handler) => {
-    self.exceptionHandlers[handler.name] = handler
+    this.exceptionHandlers[handler.name] = handler
   })
 
-  this._hnames = Object.keys(self.exceptionHandlers)
+  this._hnames = Object.keys(this.exceptionHandlers)
 
   if (!this.catchExceptions) {
     this.catchExceptions = this._uncaughtException.bind(this)
@@ -437,11 +427,9 @@ Logger.prototype.handleExceptions = function () {
 // for the current process
 //
 Logger.prototype.unhandleExceptions = function () {
-  var self = this
-
   if (this.catchExceptions) {
     Object.keys(this.exceptionHandlers).forEach((name) => {
-      var handler = self.exceptionHandlers[name]
+      const handler = this.exceptionHandlers[name]
       if (handler.close) {
         handler.close()
       }
@@ -449,7 +437,7 @@ Logger.prototype.unhandleExceptions = function () {
 
     this.exceptionHandlers = {}
     Object.keys(this.transports).forEach((name) => {
-      var transport = self.transports[name]
+      const transport = this.transports[name]
       if (transport.handleExceptions) {
         transport.handleExceptions = false
       }
@@ -468,7 +456,7 @@ Logger.prototype.unhandleExceptions = function () {
 // Adds a transport of the specified type to this instance.
 //
 Logger.prototype.add = function (transport, options, created) {
-  var instance = created ? transport : new transport(options)
+  const instance = created ? transport : new transport(options)
 
   if (!instance.name && !instance.log) {
     throw new Error('Unknown transport with no log() method')
@@ -517,13 +505,13 @@ Logger.prototype.clear = function () {
 // Removes a transport of the specified type from this instance.
 //
 Logger.prototype.remove = function (transport) {
-  var name = typeof transport !== 'string' ? transport.name || transport.prototype.name : transport
+  const name = typeof transport !== 'string' ? transport.name || transport.prototype.name : transport
 
   if (!this.transports[name]) {
     throw new Error(`Transport ${name} not attached to this instance`)
   }
 
-  var instance = this.transports[name]
+  const instance = this.transports[name]
   delete this.transports[name]
   this._names = Object.keys(this.transports)
 
@@ -562,22 +550,17 @@ Logger.prototype.startTimer = function () {
 // will log the difference in milliseconds along with the message.
 //
 Logger.prototype.profile = function (id) {
-  var now = Date.now(),
-    then,
-    args,
-    msg,
-    meta,
-    callback
+  const now = Date.now()
 
   if (this.profilers[id]) {
-    then = this.profilers[id]
+    const then = this.profilers[id]
     delete this.profilers[id]
 
     // Support variable arguments: msg, meta, callback
-    args = Array.prototype.slice.call(arguments)
-    callback = typeof args[args.length - 1] === 'function' ? args.pop() : null
-    meta = typeof args[args.length - 1] === 'object' ? args.pop() : {}
-    msg = args.length === 2 ? args[1] : id
+    const args = Array.prototype.slice.call(arguments)
+    const callback = typeof args[args.length - 1] === 'function' ? args.pop() : null
+    const meta = typeof args[args.length - 1] === 'object' ? args.pop() : {}
+    const msg = args.length === 2 ? args[1] : id
 
     // Set the duration property of the metadata
     meta.durationMs = now - then
@@ -623,17 +606,15 @@ Logger.prototype.cli = function () {
 // exits the current process.
 //
 Logger.prototype._uncaughtException = function (err) {
-  var self = this,
-    responded = false,
-    info = exception.getAllInfo(err),
-    handlers = this._getExceptionHandlers(),
-    timeout,
-    doExit
+  let responded = false
+  const info = exception.getAllInfo(err)
+  const handlers = this._getExceptionHandlers()
+  let timeout
 
   //
   // Calculate if we should exit on this error
   //
-  doExit = typeof this.exitOnError === 'function' ? this.exitOnError(err) : this.exitOnError
+  const doExit = typeof this.exitOnError === 'function' ? this.exitOnError(err) : this.exitOnError
 
   function logAndWait(transport, next) {
     transport.logException(`uncaughtException: ${err.message || err}`, info, next, err)
@@ -671,11 +652,9 @@ Logger.prototype._uncaughtException = function (err) {
 // for this instance.
 //
 Logger.prototype._getExceptionHandlers = function () {
-  var self = this
-
   return this._hnames
-    .map(name => self.exceptionHandlers[name])
-    .concat(this._names.map(name => self.transports[name].handleExceptions && self.transports[name]))
+    .map(name => this.exceptionHandlers[name])
+    .concat(this._names.map(name => this.transports[name].handleExceptions && this.transports[name]))
     .filter(Boolean)
 }
 
@@ -709,7 +688,7 @@ function ProfileHandler(logger) {
 // logs the `msg` along with the duration since creation.
 //
 ProfileHandler.prototype.done = function (msg) {
-  var args = Array.prototype.slice.call(arguments),
+  const args = Array.prototype.slice.call(arguments),
     callback = typeof args[args.length - 1] === 'function' ? args.pop() : null,
     meta = typeof args[args.length - 1] === 'object' ? args.pop() : {}
 
