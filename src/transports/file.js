@@ -290,12 +290,18 @@ File.prototype.query = function (opts, callback) {
     const data = (buff + newData).split(/\n+/)
     const lastIndex = data.length - 1
 
-    data.forEach((bit) => {
+    //    data.forEach((bit) => {
+    //      if (!options.start || row >= options.start) {
+    //        add(bit)
+    //      }
+    //      row += 1
+    //    })
+    for (let i = 0; i < lastIndex; i++) {
       if (!options.start || row >= options.start) {
-        add(bit)
+        add(data[i])
       }
       row += 1
-    })
+    }
 
     buff = data[lastIndex]
   })
@@ -326,14 +332,15 @@ File.prototype.stream = function (opts) {
 
   stream.destroy = tailFile(tail, (err, line) => {
     if (err) {
-      return stream.emit('error', err)
+      stream.emit('error', err)
+      return
     }
 
     try {
       stream.emit('data', line)
-      line = JSON.parse(line)
-      stream.emit('log', line)
+      stream.emit('log', JSON.parse(line))
     } catch (e) {
+      e.message = line
       stream.emit('error', e)
     }
   })

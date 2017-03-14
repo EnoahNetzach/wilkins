@@ -20,6 +20,8 @@
     "cycle": "1.0.x",
     "eyes": "0.1.x",
     "isstream": "0.1.x",
+    "react-router": "^4.0.0",
+    "react-router-dom": "^4.0.0",
     "stack-trace": "0.0.x"
   },
   "devDependencies": {
